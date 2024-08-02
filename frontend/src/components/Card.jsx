@@ -50,7 +50,7 @@ function Card({ pet, getData }) {
                 <div className="flex flex-row gap-3 max-h-[70%] w-full">
                     <div className="w-[50%] flex justify-center items-center bg-gray-200 rounded">
                         {
-                            pet.image != null ? <img src={`http://localhost:3333/public/img/${pet.image}`} alt={pet.name} className="w-full h-full object-cover" /> : (
+                            pet.image != null ? <img src={`http://localhost:3333/public/img/${pet.image}`} alt={pet.name} className="w-full h-full object-contain" /> : (
                                 <p className="text-center">Sin imagen</p>
                             )
                         }
@@ -110,7 +110,7 @@ function Card({ pet, getData }) {
             </CustomModal>
             <div className="h-48 bg-cover bg-center flex justify-center items-center">
                 {
-                    pet.image != null ? <img src={`http://localhost:3333/public/img/${pet.image}`} alt={pet.name} className="w-full h-full object-cover" /> : (
+                    pet.image != null ? <img src={`http://localhost:3333/public/img/${pet.image}`} alt={pet.name} className="w-full h-full object-contain" /> : (
                         <p className="text-center">Sin imagen</p>
                     )
                 }

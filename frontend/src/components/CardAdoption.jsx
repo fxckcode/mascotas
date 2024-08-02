@@ -60,7 +60,7 @@ function CardAdoption({ adoption, getData }) {
         <div className="flex flex-row gap-3 w-full h-full">
           <div className="w-[50%] flex justify-center items-center bg-gray-200 rounded">
             {
-              adoption.image != null ? <img src={`http://localhost:3333/public/img/${adoption.image}`} alt={adoption.name} className="w-full h-full object-cover" /> : (
+              adoption.image != null ? <img src={`http://localhost:3333/public/img/${adoption.image}`} alt={adoption.name} className="w-full h-full object-contain" /> : (
                 <p className="text-center">Sin imagen</p>
               )
             }
@@ -158,7 +158,7 @@ function CardAdoption({ adoption, getData }) {
       </CustomModal>
       <div className="h-48 bg-cover bg-center flex justify-center items-center">
         {
-          adoption.image != null ? <img src={`http://localhost:3333/public/img/${adoption.image}`} alt={adoption.name} className="w-full h-full object-cover" /> : (
+          adoption.image != null ? <img src={`http://localhost:3333/public/img/${adoption.image}`} alt={adoption.name} className="w-full h-full object-" /> : (
             <p className="text-center">Sin imagen</p>
           )
         }
