@@ -38,6 +38,21 @@ function CardAdoption({ adoption, getData }) {
     }
   }
 
+  const handleReject = async () => {
+    try {
+      if (confirm('¿Estas seguro que quieres rechazar esta adopción?')) {
+        await axiosClient.put(`/reject/${adoption.id_user}/${adoption.id_pet}`).then((response) => {
+          if (response.status == 200) {
+            toast.success('Adopción rechazada')
+            getData()
+          }
+        })
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="bg-background rounded-lg shadow-lg overflow-hidden w-80 border border-gray-200">
       <CustomModal open={open} onClose={() => setOpen(false)} >
@@ -91,6 +106,22 @@ function CardAdoption({ adoption, getData }) {
               <div className="w-full flex flex-row">
                 <p className="w-1/3 font-bold">Descripción: </p>
                 <p className="w-full">{adoption.description}</p>
+              </div>
+
+              <h2 className='text-xl font-semibold text-center'>Datos del Adoptante</h2>
+              <div className="w-full flex flex-col gap-2">
+                <div className="w-full flex flex-row">
+                  <p className="w-1/3 font-bold">Nombre:</p>
+                  <p className="w-full">{adoption.user_name}</p>
+                </div>
+                <div className="w-full flex flex-row">
+                  <p className="w-1/3 font-bold">Correo:</p>
+                  <p className="w-full">{adoption.email}</p>
+                </div>
+                <div className="w-full flex flex-row">
+                  <p className="w-1/3 font-bold">Telefono:</p>
+                  <p className="w-full">{adoption.phone}</p>
+                </div>
               </div>
 
             </div>
@@ -162,7 +193,7 @@ function CardAdoption({ adoption, getData }) {
             ) : adoption.state == 'En proceso' ? (
               <div className='w-full flex justify-around items-center'>
                 <button className='text-green-600 hover:font-semibold hover:scale-105 transition-all' onClick={() => handleAccept()}>Aprobar</button>
-                <button className='text-red-600 hover:font-semibold hover-scale-105 transition-all'>Rechazar</button>
+                <button className='text-red-600 hover:font-semibold hover-scale-105 transition-all' onClick={() => handleReject()}>Rechazar</button>
               </div>
             ) : adoption.state == 'Aprobado' ? (
               <Button disabled>Aprobado</Button>

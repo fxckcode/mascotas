@@ -43,7 +43,6 @@ function Card({ pet, getData }) {
     }
 
 
-
     return (
         <div className="bg-background rounded-lg shadow-lg overflow-hidden w-80 border border-gray-200">
             <CustomModal open={open} onClose={() => setOpen(false)} >

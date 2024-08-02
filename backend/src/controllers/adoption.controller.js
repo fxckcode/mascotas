@@ -111,32 +111,46 @@ export const acceptAdoption = async (req, res) => {
     const { id, id_pet } = req.params;
 
     try {
-        // Inicia una transacción
         await pool.query('START TRANSACTION');
-
-        // Actualiza el estado de la adopción
         const [result] = await pool.query('UPDATE adoptions SET state = 2 WHERE id_user = ? and id_pet', [id, id_pet]);
         
-        // Verifica si la adopción fue actualizada
         if (result.affectedRows === 0) {
             await pool.query('ROLLBACK');
             return res.status(404).json({ message: 'No se pudo aceptar la adopción, registro no encontrado' });
         }
-
-        // Actualiza el estado de la mascota
         const [petResult] = await pool.query('UPDATE pets SET state = 3 WHERE id = ?', [id_pet]);
-        
-        // Verifica si la mascota fue actualizada
         if (petResult.affectedRows === 0) {
             await pool.query('ROLLBACK');
             return res.status(404).json({ message: 'No se pudo actualizar el estado de la mascota, registro no encontrado' });
         }
-
-        // Confirma la transacción
         await pool.query('COMMIT');
         return res.status(200).json({ message: 'Adopción aceptada con éxito' });
     } catch (error) {
-        await pool.query('ROLLBACK');  // Revertir los cambios si hay un error
+        await pool.query('ROLLBACK'); 
         return res.status(500).json({ message: error.message });
     }
 };
+
+export const rejectAdoption = async (req, res) => {
+    const { id, id_pet } = req.params;
+
+    try {
+        await pool.query('START TRANSACTION');
+        const [result] = await pool.query('UPDATE adoptions SET state = 3 WHERE id_user = ? and id_pet', [id, id_pet]);
+        
+        if (result.affectedRows === 0) {
+            await pool.query('ROLLBACK');
+            return res.status(404).json({ message: 'No se pudo aceptar la adopción, registro no encontrado' });
+        }
+        const [petResult] = await pool.query('UPDATE pets SET state = 1 WHERE id = ?', [id_pet]);
+        if (petResult.affectedRows === 0) {
+            await pool.query('ROLLBACK');
+            return res.status(404).json({ message: 'No se pudo actualizar el estado de la mascota, registro no encontrado' });
+        }
+        await pool.query('COMMIT');
+        return res.status(200).json({ message: 'Solicitud de adopción cancelada con exito' });
+    } catch (error) {
+        await pool.query('ROLLBACK'); 
+        return res.status(500).json({ message: error.message });
+    }
+}
