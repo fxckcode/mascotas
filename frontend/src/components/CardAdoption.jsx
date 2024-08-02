@@ -180,9 +180,9 @@ function CardAdoption({ adoption, getData }) {
               <>
                 <Button
                   onClick={() => handleAdopt(adoption.id)}
-                  disabled={adoption.state === 'En proceso' || adoption.state === 'Adoptado'}
+                  disabled={adoption.state === 'En proceso' || adoption.state === 'Aprobado'}
                 >
-                  {adoption.state === 'En proceso' ? 'En proceso' : adoption.state === 'Adoptado' ? 'Adoptado' : 'Adoptar'}
+                  {adoption.state === 'En proceso' ? 'En proceso' : adoption.state === 'Aprobado' ? 'Adoptado' : 'Adoptar'}
                 </Button>
                 {
                   adoption.state == 'En proceso' ? (
