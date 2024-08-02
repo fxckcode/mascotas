@@ -17,7 +17,7 @@ export const getMyAdoption = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const [ result ] = await pool.query("SELECT p.id as id_pet, p.race, p.age, p.sterilized, p.gender, p.image, p.description, p.background, p.vaccines , p.location, m.name as municipality, a.state, u.name as user_name, p.name, u.email, u.phone FROM adoptions as a JOIN pets as p ON a.id_pet = p.id JOIN users u ON a.id_user = u.id LEFT JOIN municipalities m ON p.id_municipality = m.id WHERE a.id_user = ? or a.state != 'No aprobado' ", [parseInt(id)])
+        const [ result ] = await pool.query("SELECT p.id as id_pet, p.race, p.age, p.sterilized, p.gender, p.image, p.description, p.background, p.vaccines , p.location, m.name as municipality, a.state, u.name as user_name, p.name, u.email, u.phone FROM adoptions as a JOIN pets as p ON a.id_pet = p.id JOIN users u ON a.id_user = u.id LEFT JOIN municipalities m ON p.id_municipality = m.id WHERE a.id_user = ? and a.state != 'No aprobado' ", [parseInt(id)])
 
         if (result.length > 0) {
             return res.status(200).json(result)
