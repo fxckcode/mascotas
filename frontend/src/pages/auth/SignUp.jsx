@@ -14,6 +14,7 @@ function SignUp() {
     const email = useRef(null)
     const telefono = useRef(null)
     const password = useRef(null)
+    const identification = useRef(null)
 
     useEffect(() => {
         document.title = 'Petfy | Registrarse'
@@ -26,7 +27,8 @@ function SignUp() {
                 name: nombre.current.value,
                 email: email.current.value,
                 phone: telefono.current.value,
-                password: password.current.value
+                password: password.current.value,
+                identification: identification.current.value
             }
 
             await axiosClient.post('/users', data).then((response) => {
@@ -56,6 +58,10 @@ function SignUp() {
                     <div>
                         <Label htmlFor="telefono">Teléfono</Label>
                         <Input type="number" id="telefono" ref={telefono} required />
+                    </div>
+                    <div>
+                        <Label htmlFor="identification">Identificación</Label>
+                        <Input type="number" id="identification" ref={identification} required />
                     </div>
                     <div>
                         <Label htmlFor="email">Correo</Label>
