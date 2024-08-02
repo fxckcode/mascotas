@@ -127,7 +127,7 @@ function CardAdoption({ adoption, getData }) {
             </div>
             <div className="flex items-center justify-between mt-4 flex-row gap-3">
               {
-                user.rol == 'usuario' ? (
+                user.role == 'usuario' ? (
                   <>
                     <Button
                       onClick={() => handleAdopt(adoption.id)}
@@ -176,7 +176,7 @@ function CardAdoption({ adoption, getData }) {
         </div>
         <div className="flex items-center justify-between mt-4 flex-row gap-3">
           {
-            user.rol == 'usuario' ? (
+            user.role == 'usuario' ? (
               <>
                 <Button
                   onClick={() => handleAdopt(adoption.id)}
