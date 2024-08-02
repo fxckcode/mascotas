@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import Base from '../layout/Base'
 import axiosClient from '../utils/axiosClient'
+import PetsGrafica from '../components/PetsGrafica'
+import AdoptionStatusGrafica from '../components/AdoptionStatusGrafica'
+import GenderPieChart from '../components/GenderPieChart'
 
 function Dasboard() {
 
   const [ countPets, setCountPets ] = useState(0)
   const [ countAdoptions, setCountAdoptions ] = useState(0)
-
+  const [pets, setPets] = useState([])
+  const [adoptions, setAdoptions] = useState([])
   useEffect(() => {
     const fetchData = async () => {
       try {
         await axiosClient.get('/pets').then((response) => {
           if (response.status == 200) {
             setCountPets(response.data.length)
+            setPets(response.data)
           }
         })
         await axiosClient.get('/adoptions').then((response) => {
           if (response.status == 200) {
             setCountAdoptions(response.data.length)
+            setAdoptions(response.data)
           }
         })
       } catch (error) {
@@ -71,6 +77,28 @@ function Dasboard() {
                 <p className="text-3xl font-bold text-blue-600">{countAdoptions}</p>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Statistics Section */}
+        <section className="py-10 bg-gray-100">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-white p-6 rounded-lg shadow-md text-center">
+                <PetsGrafica data={pets} />
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md text-center">
+                <AdoptionStatusGrafica data={adoptions} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 bg-gray-100">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+             <GenderPieChart data={pets} />
+          </div>
           </div>
         </section>
 

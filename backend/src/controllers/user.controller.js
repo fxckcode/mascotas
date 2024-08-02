@@ -17,8 +17,8 @@ export const getUsers = async (req, res) => {
 
 export const createUser = async (req, res) => {
     try {
-        const { name, email, password, phone } = req.body
-        const [result] = await pool.query('insert into users (name, email, password, phone) values (?, ?, ?, ?)', [name, email, password, phone])
+        const { name, email, password, phone, identification } = req.body
+        const [result] = await pool.query('insert into users (name, email, password, phone, identification) values (?, ?, ?, ?, ?)', [name, email, password, phone, identification])
         if (result.affectedRows > 0) {
             return res.status(201).json({ message: 'Usuario creado con éxito' })
         }
