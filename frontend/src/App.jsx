@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import Logout from './pages/auth/Logout';
 import PrivateRoutes from './utils/PrivateRoutes';
 import Create from "./pages/Create";
+import Dasboard from "./pages/Dasboard";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/singup" element={<SignUp />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/" element={<PrivateRoutes />} >
+          <Route path="/dashboard" element={<Dasboard />} />
           <Route path="/home" element={<Home />} />
           <Route path="/adopciones" element={<Adopciones />} />
           <Route path="/profile" element={<Profile />} />

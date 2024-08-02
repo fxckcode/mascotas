@@ -10,7 +10,10 @@ function Navbar() {
                 <nav>
                     <ul className='flex gap-5'>
                         <li>
-                            <NavLink to="/home" className={({ isActive }) => isActive ? 'font-semibold underline text-[#C683EA]' : ''}>Inicio</NavLink>
+                            <NavLink to="/dashboard" className={({ isActive }) => isActive ? 'font-semibold underline text-[#C683EA]' : ''}>Inicio</NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/home" className={({ isActive }) => isActive ? 'font-semibold underline text-[#C683EA]' : ''}>Mascotas</NavLink>
                         </li>
                         <li>
                             <NavLink to="/adopciones" className={({ isActive }) => isActive ? 'font-semibold underline text-[#C683EA]' : ''}>Adopciones</NavLink>
