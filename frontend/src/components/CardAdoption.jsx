@@ -57,15 +57,15 @@ function CardAdoption({ adoption, getData }) {
     <div className="bg-background rounded-lg shadow-lg overflow-hidden w-80 border border-gray-200">
       <CustomModal open={open} onClose={() => setOpen(false)} >
         <h2 className="text-xl font-semibold">Más sobre {adoption.name}</h2>
-        <div className="flex flex-row gap-3 w-full">
-          <div className="w-[50%] flex justify-center items-center h-96 bg-gray-200 rounded">
+        <div className="flex flex-row gap-3 w-full h-full">
+          <div className="w-[50%] flex justify-center items-center bg-gray-200 rounded">
             {
               adoption.image != null ? <img src={`http://localhost:3333/public/img/${adoption.image}`} alt={adoption.name} className="w-full h-full object-cover" /> : (
                 <p className="text-center">Sin imagen</p>
               )
             }
           </div>
-          <div className="w-[50%] flex flex-col gap-3 h-80 justify-between">
+          <div className="w-[50%] flex flex-col gap-3 justify-between">
             <div className="flex flex-col gap-3">
               <div className="w-full flex flex-row">
                 <p className="w-1/3 font-bold">Nombre: </p>

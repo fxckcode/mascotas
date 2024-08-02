@@ -11,7 +11,7 @@ function Base({ children, title }) {
     return (
         <div className="w-full flex flex-col">
             <Navbar />
-            <main className="container mx-auto flex justify-between items-center mt-10">
+            <main className="container mx-auto h-[90%] flex justify-between items-center mt-10">
                 {children}
             </main>
             <Footer />
