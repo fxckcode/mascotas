@@ -10,23 +10,28 @@ import Logout from './pages/auth/Logout';
 import PrivateRoutes from './utils/PrivateRoutes';
 import Create from "./pages/Create";
 import Dasboard from "./pages/Dasboard";
+import { UserProvider } from "./context/UserContext";
+import Edit from "./pages/Edit";
 
 function App() {
   return (
     <>
       <Toaster />
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/singup" element={<SignUp />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/" element={<PrivateRoutes />} >
-          <Route path="/dashboard" element={<Dasboard />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/adopciones" element={<Adopciones />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/crear" element={<Create />} />
-        </Route>
-      </Routes>
+      <UserProvider>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/singup" element={<SignUp />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/" element={<PrivateRoutes />} >
+            <Route path="/dashboard" element={<Dasboard />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/adopciones" element={<Adopciones />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/crear" element={<Create />} />
+            <Route path="/edit/:id" element={<Edit />} />
+          </Route>
+        </Routes>
+      </UserProvider>
     </>
   )
 }

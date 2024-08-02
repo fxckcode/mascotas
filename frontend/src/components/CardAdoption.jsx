@@ -23,6 +23,21 @@ function CardAdoption({ adoption, getData }) {
     }
   }
 
+  const handleAccept = async () => {
+    try {
+      if (confirm('¿Estas seguro que quieres aceptar esta adopción?')) {
+        await axiosClient.put(`/accept/${adoption.id_user}/${adoption.id_pet}`).then((response) => {
+          if (response.status == 200) {
+            toast.success('Adopción aceptada')
+            getData()
+          }
+        })
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="bg-background rounded-lg shadow-lg overflow-hidden w-80 border border-gray-200">
       <CustomModal open={open} onClose={() => setOpen(false)} >
@@ -39,7 +54,7 @@ function CardAdoption({ adoption, getData }) {
             <div className="flex flex-col gap-3">
               <div className="w-full flex flex-row">
                 <p className="w-1/3 font-bold">Nombre: </p>
-                <p className="w-full">{adoption.name}</p>
+                <p className="w-full">{adoption.name || adoption.pet_name}</p>
               </div>
               <div className="w-full flex flex-row">
                 <p className="w-1/3 font-bold">Raza: </p>
@@ -80,16 +95,31 @@ function CardAdoption({ adoption, getData }) {
 
             </div>
             <div className="flex items-center justify-between mt-4 flex-row gap-3">
-              <Button
-                onClick={() => handleAdopt(adoption.id)}
-                disabled={adoption.state === 'En proceso' || adoption.state === 'Adoptado'}
-              >
-                {adoption.state === 'En proceso' ? 'En proceso' : pet.state === 'Adoptado' ? 'Adoptado' : 'Adoptar'}
-              </Button>
               {
-                adoption.state == 'En proceso' ? (
-                  <p onClick={() => handleCancel(user.id)} className='w-72 text-red-800 hover:scale-105 transition-all cursor-pointer'>Cancelar solicitud</p>
-                ) : ''
+                user.rol == 'usuario' ? (
+                  <>
+                    <Button
+                      onClick={() => handleAdopt(adoption.id)}
+                      disabled={adoption.state === 'En proceso' || adoption.state === 'Adoptado'}
+                    >
+                      {adoption.state === 'En proceso' ? 'En proceso' : adoption.state === 'Adoptado' ? 'Adoptado' : 'Adoptar'}
+                    </Button>
+                    {
+                      adoption.state == 'En proceso' ? (
+                        <p onClick={() => handleCancel(user.id)} className='w-72 text-red-800 hover:scale-105 transition-all cursor-pointer'>Cancelar solicitud</p>
+                      ) : ''
+                    }
+                  </>
+                ) : adoption.state == 'En proceso' ? (
+                  <div className='w-full flex justify-around items-center'>
+                    <button className='text-green-600 hover:font-semibold hover:scale-105 transition-all' onClick={() => handleAccept()}>Aprobar</button>
+                    <button className='text-red-600 hover:font-semibold hover-scale-105 transition-all'>Rechazar</button>
+                  </div>
+                ) : adoption.state == 'Aprobado' ? (
+                  <Button disabled>Aprobado</Button>
+                ) : adoption.state == 'No aprobado' ? (
+                  <button disabled className='w-full p-2 bg-red-700 text-white rounded'>No aprobado</button>
+                ) : (<></>)
               }
             </div>
           </div>
@@ -114,16 +144,31 @@ function CardAdoption({ adoption, getData }) {
           </div>
         </div>
         <div className="flex items-center justify-between mt-4 flex-row gap-3">
-          <Button
-            onClick={() => handleAdopt(adoption.id)}
-            disabled={adoption.state === 'En proceso' || adoption.state === 'Adoptado'}
-          >
-            {adoption.state === 'En proceso' ? 'En proceso' : pet.state === 'Adoptado' ? 'Adoptado' : 'Adoptar'}
-          </Button>
           {
-            adoption.state == 'En proceso' ? (
-              <p onClick={() => handleCancel(user.id)} className='w-72 text-red-800 hover:scale-105 transition-all cursor-pointer'>Cancelar solicitud</p>
-            ) : ''
+            user.rol == 'usuario' ? (
+              <>
+                <Button
+                  onClick={() => handleAdopt(adoption.id)}
+                  disabled={adoption.state === 'En proceso' || adoption.state === 'Adoptado'}
+                >
+                  {adoption.state === 'En proceso' ? 'En proceso' : adoption.state === 'Adoptado' ? 'Adoptado' : 'Adoptar'}
+                </Button>
+                {
+                  adoption.state == 'En proceso' ? (
+                    <p onClick={() => handleCancel(user.id)} className='w-72 text-red-800 hover:scale-105 transition-all cursor-pointer'>Cancelar solicitud</p>
+                  ) : ''
+                }
+              </>
+            ) : adoption.state == 'En proceso' ? (
+              <div className='w-full flex justify-around items-center'>
+                <button className='text-green-600 hover:font-semibold hover:scale-105 transition-all' onClick={() => handleAccept()}>Aprobar</button>
+                <button className='text-red-600 hover:font-semibold hover-scale-105 transition-all'>Rechazar</button>
+              </div>
+            ) : adoption.state == 'Aprobado' ? (
+              <Button disabled>Aprobado</Button>
+            ) : adoption.state == 'No aprobado' ? (
+              <button disabled className='w-full p-2 bg-red-700 text-white rounded'>No aprobado</button>
+            ) : (<></>)
           }
         </div>
       </div>

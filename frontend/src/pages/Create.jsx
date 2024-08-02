@@ -7,10 +7,11 @@ import Button from "../components/Button"
 import { useEffect, useState } from "react"
 import axiosClient from "../utils/axiosClient"
 import toast from "react-hot-toast"
+import { useNavigate } from "react-router-dom"
 function Create() {
 
   const [ municipalities, setMunicipalities ] = useState([])
-
+  const navigate = useNavigate()
   useEffect(() => {
     const fetchMunicipalities = async () => {
       try {
@@ -51,6 +52,7 @@ function Create() {
         if (response.status === 201) {
           toast.success('Mascota creada correctamente')
           e.target.reset()
+          navigate('/home')
         }
       })
     } catch (error) {
@@ -76,7 +78,7 @@ function Create() {
           <div className="flex flex-row gap-5">
             <div className="w-1/2">
               <Label htmlFor="age">Edad</Label>
-              <Input name="age" type="number" required id="age" />
+              <Input name="age" type="text" required id="age" />
             </div>
             <div className="w-1/2">
               <Label htmlFor="sterilized">Esterilizado</Label>

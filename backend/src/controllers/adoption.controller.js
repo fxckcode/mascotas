@@ -2,7 +2,7 @@ import pool from "../database/conexion.js";
 
 export const getAdoptions = async (req, res) => {
     try {
-        const [result] = await pool.query("select p.id as id_pet, p.race, p.age, p.sterilized, p.gender, p.image, p.description, p.background, p.location, m.name as municipality, a.state, u.name as user_name, p.name, u.email, u.phone from adoptions as a join pets as p on a.id = p.id join users u on a.id_user = u.id JOIN municipalities m on p.id_municipality = m.id")
+        const [result] = await pool.query("SELECT p.id as id_pet, p.race, p.age, p.sterilized, p.gender, p.image, p.description, p.background, p.vaccines , p.location, m.name as municipality, a.state, u.name as user_name, p.name, u.email, u.phone, u.id as id_user FROM adoptions as a JOIN pets as p ON a.id_pet = p.id JOIN users u ON a.id_user = u.id LEFT JOIN municipalities m ON p.id_municipality = m.id")
         if (result.length > 0) {
             return res.status(200).json(result)
         } else {
@@ -33,7 +33,7 @@ export const getMyAdoption = async (req, res) => {
 export const getAdoption = async (req, res) => {
     try {
         const { id } = req.params;
-        const [result] = await pool.query("elect p.id as id_pet, p.race, p.age, p.sterilized, p.gender, p.image, p.description, p.background, p.location, m.name as municipality, a.state, u.name, u.email, u.phone from adoptions as a join pets as p on a.id = p.id join users u on a.id_user = u.id JOIN municipalities m on p.id_municipality = m.id where a.id=?", [id])
+        const [result] = await pool.query("select p.id as id_pet, p.race, p.age, p.sterilized, p.gender, p.image, p.description, p.background, p.location, m.name as municipality, a.state, u.name, u.email, u.phone from adoptions as a join pets as p on a.id = p.id join users u on a.id_user = u.id lEFT JOIN municipalities m on p.id_municipality = m.id where a.id=?", [id])
         if (result.length > 0) {
             return res.status(200).json(result)
         } else {
@@ -106,3 +106,37 @@ export const deleteAdoptionByUser = async (req, res) => {
         return res.status(500).json({ message: error.message })
     }
 }
+
+export const acceptAdoption = async (req, res) => {
+    const { id, id_pet } = req.params;
+
+    try {
+        // Inicia una transacción
+        await pool.query('START TRANSACTION');
+
+        // Actualiza el estado de la adopción
+        const [result] = await pool.query('UPDATE adoptions SET state = 2 WHERE id_user = ? and id_pet', [id, id_pet]);
+        
+        // Verifica si la adopción fue actualizada
+        if (result.affectedRows === 0) {
+            await pool.query('ROLLBACK');
+            return res.status(404).json({ message: 'No se pudo aceptar la adopción, registro no encontrado' });
+        }
+
+        // Actualiza el estado de la mascota
+        const [petResult] = await pool.query('UPDATE pets SET state = 3 WHERE id = ?', [id_pet]);
+        
+        // Verifica si la mascota fue actualizada
+        if (petResult.affectedRows === 0) {
+            await pool.query('ROLLBACK');
+            return res.status(404).json({ message: 'No se pudo actualizar el estado de la mascota, registro no encontrado' });
+        }
+
+        // Confirma la transacción
+        await pool.query('COMMIT');
+        return res.status(200).json({ message: 'Adopción aceptada con éxito' });
+    } catch (error) {
+        await pool.query('ROLLBACK');  // Revertir los cambios si hay un error
+        return res.status(500).json({ message: error.message });
+    }
+};

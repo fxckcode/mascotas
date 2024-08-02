@@ -3,11 +3,13 @@ import Button from "./Button"
 import CustomModal from "./Modal"
 import toast from "react-hot-toast"
 import axiosClient from "../utils/axiosClient"
+import { useNavigate } from "react-router-dom"
 
 function Card({ pet, getData }) {
     const [open, setOpen] = useState(false)
     const user = JSON.parse(localStorage.getItem('user'))
     const [vaccines, setVaccines] = useState([])
+    const navigate = useNavigate()
     const handleAdopt = async (id) => {
         try {
             if (confirm('¿Estas que quieres iniciar el proceso de adopción?')) {
@@ -25,25 +27,21 @@ function Card({ pet, getData }) {
         }
     }
 
-    useEffect(() => {
-        const getVaccines = async () => {
-            try {
-                await axiosClient(`/listVaccinePet/${pet.id}`).then((response) => {
+    const handleDelete = async () => {
+        try {
+            if (confirm('¿Estas seguro que quieres eliminar esta mascota?')) {
+                await axiosClient.delete(`/pet/${pet.id}`).then((response) => {
                     if (response.status == 200) {
-                        setVaccines(response.data)
-                        console.log(response.data);
+                        toast.success('Mascota eliminada con exito')
+                        getData()
                     }
                 })
-            } catch (error) {
-                console.error(error);
             }
+        } catch (error) {
+            console.error(error);
         }
+    }
 
-        if (open) {
-            getVaccines()
-        }
-
-    }, [open])
 
 
     return (
@@ -130,12 +128,22 @@ function Card({ pet, getData }) {
                     </div>
                 </div>
                 <div className="flex items-center justify-between mt-4">
-                    <Button
-                        onClick={() => handleAdopt(pet.id)}
-                        disabled={pet.state === 'En proceso' || pet.state === 'Adoptado'}
-                    >
-                        {pet.state === 'En proceso' ? 'En proceso' : pet.state === 'Adoptado' ? 'Adoptado' : 'Adoptar'}
-                    </Button>
+                    {
+                        user.role == 'usuario' ? (
+                            <Button
+                                onClick={() => handleAdopt(pet.id)}
+                                disabled={pet.state === 'En proceso' || pet.state === 'Adoptado'}
+                            >
+                                {pet.state === 'En proceso' ? 'En proceso' : pet.state === 'Adoptado' ? 'Adoptado' : 'Adoptar'}
+                            </Button>
+                        ) : (
+                            <div className="w-full flex justify-around items-center">
+                                <p className="font-semibold">{pet.state}</p>
+                                <button className="text-purple-700 hover:font-semibold hover:scale-105 transition-all" onClick={() => navigate(`/edit/${pet.id}`) }>Editar</button>
+                                <button onClick={() => handleDelete()} className="text-red-700 hover:font-semibold hover:scale-105 transition-all">Eliminar</button>
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </div>

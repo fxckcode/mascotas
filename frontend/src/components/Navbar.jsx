@@ -21,9 +21,13 @@ function Navbar() {
                         <li>
                             <NavLink to="/profile" className={({ isActive }) => isActive ? 'font-semibold underline text-[#C683EA]' : ''}>Perfil</NavLink>
                         </li>
-                        <li>
-                            <NavLink to="/crear" className={({ isActive }) => (` p-2 bg-[#c683ea] rounded text-white hover:bg-[#a56dc4]`)}>Crear</NavLink>
-                        </li>
+                        {
+                            user.role === 'administrador' && (
+                            <li>
+                                <NavLink to="/crear" className={({ isActive }) => (` p-2 bg-[#c683ea] rounded text-white hover:bg-[#a56dc4]`)}>Crear</NavLink>
+                            </li>
+                            )
+                        }
                     </ul>
                 </nav>
             </div>

@@ -53,7 +53,7 @@ export const createPets = async (req, res) => {
 export const getPet = async (req, res) => {
     try {
         const { id } = req.params
-        const [result] = await pool.query('select  *, municipalities.name as municipality, pets.name left from pets join municipalities on pets.id_municipality = municipalities.id where pets.id = ?', [id])
+        const [result] = await pool.query('select pets.name, municipalities.name as municipality, pets.* from pets left join municipalities on pets.id_municipality = municipalities.id where pets.id = ?', [id])
 
         if (result.length > 0) {
             return res.status(200).json(result)
@@ -69,8 +69,15 @@ export const getPet = async (req, res) => {
 export const updatePet = async (req, res) => {
     try {
         const { id } = req.params
-        const { name, race, age, sterilized, gender, image, description, background, location, id_municipality } = req.body
+        const { name, race, age, sterilized, gender, description, background, location, id_municipality, vaccines } = req.body
         const [oldPet] = await pool.query('select * from pets where id = ?', [id])
+
+        var image = null
+
+        if (req.file) {
+            image = req.file.originalname
+        }
+
         const data = {
             name: name ? name : oldPet[0].name,
             race: race ? race : oldPet[0].race,
@@ -81,7 +88,8 @@ export const updatePet = async (req, res) => {
             description: description ? description : oldPet[0].description,
             background: background ? background : oldPet[0].background,
             location: location ? location : oldPet[0].location,
-            id_municipality: id_municipality ? id_municipality : oldPet[0].id_municipality
+            id_municipality: id_municipality ? id_municipality : oldPet[0].id_municipality,
+            vaccines: vaccines ? vaccines : oldPet[0].vaccines
         }
         const [result] = await pool.query('update pets set ? where id = ?', [data, id])
         if (result.affectedRows > 0) {

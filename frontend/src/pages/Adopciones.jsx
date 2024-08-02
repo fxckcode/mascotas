@@ -12,11 +12,20 @@ function Adopciones() {
 
   const getData = async () => {
     try {
-      await axiosClient.get(`/adoption/user/${user.id}`).then((response) => {
-        if (response.status == 200) {
-          setAdoptions(response.data)
-        }
-      })
+      if (user.role == 'usuario') {
+        await axiosClient.get(`/adoption/user/${user.id}`).then((response) => {
+          if (response.status == 200) {
+            setAdoptions(response.data)
+          }
+        })
+      } else if (user.role == 'administrador') {
+        await axiosClient.get('/adoptions').then((response) => {
+          if (response.status == 200) {
+            setAdoptions(response.data)
+          }
+        })
+
+      }
     } catch (error) {
       console.error(error);
       setAdoptions([])

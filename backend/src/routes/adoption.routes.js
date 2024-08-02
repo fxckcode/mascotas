@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createAdoption, deleteAdoption, deleteAdoptionByUser, getAdoption, getAdoptions, getMyAdoption, updateAdoption } from "../controllers/adoption.controller.js";
+import { acceptAdoption, createAdoption, deleteAdoption, deleteAdoptionByUser, getAdoption, getAdoptions, getMyAdoption, updateAdoption } from "../controllers/adoption.controller.js";
 
 const router = Router();
 
@@ -10,6 +10,7 @@ router.post("/adoptions", createAdoption);
 router.put("/adoption/:id", updateAdoption);
 router.delete("/adoption/:id", deleteAdoption);
 router.delete("/adoption/user/:id_user/:id_pet", deleteAdoptionByUser)
+router.put("/accept/:id/:id_pet", acceptAdoption);
 
 
 export default router
