@@ -14,7 +14,6 @@ function Base({ children, title }) {
             <main className="container mx-auto h-[90%] flex justify-between items-center mt-10">
                 {children}
             </main>
-            <Footer />
         </div>
     )
 }
