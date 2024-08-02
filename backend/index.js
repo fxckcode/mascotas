@@ -9,6 +9,7 @@ import listVaccinePetRoutes from './src/routes/list_vaccine_pet.routes.js'
 import adoptionRoutes from './src/routes/adoption.routes.js'
 import municipalityRoutes from './src/routes/municipality.routes.js'
 import { validarToken } from './src/controllers/auth.controller.js'
+import racesRoutes from './src/routes/race.routes.js'
 
 const server = express()
 
@@ -26,6 +27,7 @@ server.use(validarToken, vaccineRoutes)
 server.use(validarToken, listVaccinePetRoutes)
 server.use(validarToken, adoptionRoutes)
 server.use(validarToken, municipalityRoutes)
+server.use(validarToken, racesRoutes)
 
 server.listen(3333, () => {
     console.log('Servidor corriendo en el puerto http://localhost:3333/');

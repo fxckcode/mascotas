@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom"
 function Edit() {
     const { id } = useParams()
     const [municipalities, setMunicipalities] = useState([])
+    const [races, setRaces] = useState([])
     const [pet, setPet] = useState({})
     const navigate = useNavigate()
     const getPet = async () => {
@@ -18,7 +19,7 @@ function Edit() {
             await axiosClient.get(`/pet/${id}`).then((response) => {
                 if (response.status === 200) {
                     console.log(response.data[0])
-                    setPet(response.data[0])
+                    setPet(response.data)
                 }
             })
         } catch (error) {
@@ -32,6 +33,11 @@ function Edit() {
                 await axiosClient.get('/municipalities').then((response) => {
                     if (response.status === 200) {
                         setMunicipalities(response.data)
+                    }
+                })
+                await axiosClient.get('/races').then((response) => {
+                    if (response.status === 200) {
+                        setRaces(response.data)
                     }
                 })
             } catch (error) {
@@ -48,7 +54,7 @@ function Edit() {
         try {
             const formData = new FormData()
             formData.append('name', e.target.name_pet.value)
-            formData.append('race', e.target.race.value)
+            formData.append('race_id', e.target.race.value)
             formData.append('age', e.target.age.value)
             formData.append('sterilized', e.target.sterilized.value)
             formData.append('gender', e.target.gender.value)
@@ -74,17 +80,6 @@ function Edit() {
             console.error(error);
         }
     }
-
-    if (Object.keys(pet).length === 0) {
-        return (
-            <Base title="Editar mascota | Petfy">
-                <div className="flex justify-center items-center h-full">
-                    <p>Cargando...</p>
-                </div>
-            </Base>
-        )
-    }
-
     return (
         <Base title="Editar mascota | Petfy">
             <div className="flex flex-col gap-5">
@@ -97,8 +92,16 @@ function Edit() {
                         </div>
                         <div className="w-1/2">
                             <Label htmlFor="race">Raza</Label>
-                            <Input name="race" type="text" required id="race" defaultValue={pet.race} />
+                            <Select name="race" required id="race" >
+                                <option value="">Seleccione...</option>
+                                {
+                                    races.length > 0 && races.map((r) => (
+                                        <option key={r.id} value={r.id} selected={r.id == pet.id_race}>{r.name}</option>
+                                    ))
+                                }
+                            </Select>
                         </div>
+
                     </div>
                     <div className="flex flex-row gap-5">
                         <div className="w-1/2">

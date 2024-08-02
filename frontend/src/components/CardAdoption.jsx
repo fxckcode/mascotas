@@ -73,7 +73,7 @@ function CardAdoption({ adoption, getData }) {
               </div>
               <div className="w-full flex flex-row">
                 <p className="w-1/3 font-bold">Raza: </p>
-                <p className="w-full">{adoption.race}</p>
+                <p className="w-full">{adoption.race_name}</p>
               </div>
               <div className="w-full flex flex-row">
                 <p className="w-1/3 font-bold">Edad: </p>
@@ -167,7 +167,7 @@ function CardAdoption({ adoption, getData }) {
         <div className="flex flex-row">
           <div className="w-[80%]">
             <h3 className="text-lg font-semibold">{adoption.name}</h3>
-            <p className="text-sm text-muted-foreground">{adoption.race}, {adoption.age}</p>
+            <p className="text-sm text-muted-foreground">{adoption.race_name}, {adoption.age}</p>
           </div>
           <div>
             <p>{adoption.gender}</p>

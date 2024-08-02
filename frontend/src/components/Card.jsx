@@ -63,7 +63,7 @@ function Card({ pet, getData }) {
                             </div>
                             <div className="w-full flex flex-row">
                                 <p className="w-1/3 font-bold">Raza: </p>
-                                <p className="w-full">{pet.race}</p>
+                                <p className="w-full">{pet.race_name}</p>
                             </div>
                             <div className="w-full flex flex-row">
                                 <p className="w-1/3 font-bold">Edad: </p>
@@ -119,7 +119,7 @@ function Card({ pet, getData }) {
                 <div className="flex flex-row">
                     <div className="w-[80%]">
                         <h3 className="text-lg font-semibold">{pet.name}</h3>
-                        <p className="text-sm text-muted-foreground">{pet.race}, {pet.age}</p>
+                        <p className="text-sm text-muted-foreground">{pet.race_name}, {pet.age}</p>
                     </div>
                     <div>
                         <p>{pet.gender}</p>

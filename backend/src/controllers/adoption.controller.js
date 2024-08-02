@@ -2,118 +2,207 @@ import pool from "../database/conexion.js";
 
 export const getAdoptions = async (req, res) => {
     try {
-        const [result] = await pool.query("SELECT p.id as id_pet, p.race, p.age, p.sterilized, p.gender, p.image, p.description, p.background, p.vaccines , p.location, m.name as municipality, a.state, u.name as user_name, p.name, u.email, u.phone, u.id as id_user FROM adoptions as a JOIN pets as p ON a.id_pet = p.id JOIN users u ON a.id_user = u.id LEFT JOIN municipalities m ON p.id_municipality = m.id")
+        const [result] = await pool.query(
+            `SELECT 
+                p.id AS id_pet, 
+                p.race, 
+                p.age, 
+                p.sterilized, 
+                p.gender, 
+                p.image, 
+                p.description, 
+                p.background, 
+                p.vaccines, 
+                p.location, 
+                m.name AS municipality, 
+                a.state, 
+                u.name AS user_name, 
+                p.name, 
+                u.email, 
+                u.phone, 
+                u.id AS id_user, 
+                r.name AS race_name, 
+                r.id AS id_race 
+            FROM adoptions AS a 
+            JOIN pets AS p ON a.id_pet = p.id 
+            JOIN users u ON a.id_user = u.id 
+            LEFT JOIN municipalities m ON p.id_municipality = m.id 
+            LEFT JOIN races r ON p.id_race = r.id`
+        );
         if (result.length > 0) {
-            return res.status(200).json(result)
+            return res.status(200).json(result);
         } else {
-            return res.status(404).json({ message: 'No se encontraron adopciones' })
+            return res.status(404).json({ message: 'No se encontraron adopciones' });
         }
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const getMyAdoption = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const [ result ] = await pool.query("SELECT p.id as id_pet, p.race, p.age, p.sterilized, p.gender, p.image, p.description, p.background, p.vaccines , p.location, m.name as municipality, a.state, u.name as user_name, p.name, u.email, u.phone FROM adoptions as a JOIN pets as p ON a.id_pet = p.id JOIN users u ON a.id_user = u.id LEFT JOIN municipalities m ON p.id_municipality = m.id WHERE a.id_user = ? and a.state != 'No aprobado' ", [parseInt(id)])
+        const [result] = await pool.query(
+            `SELECT 
+                p.id AS id_pet, 
+                p.race, 
+                p.age, 
+                p.sterilized, 
+                p.gender, 
+                p.image, 
+                p.description, 
+                p.background, 
+                p.vaccines, 
+                p.location, 
+                m.name AS municipality, 
+                a.state, 
+                u.name AS user_name, 
+                p.name, 
+                u.email, 
+                u.phone, 
+                r.name AS race_name, 
+                r.id AS id_race 
+            FROM adoptions AS a 
+            JOIN pets AS p ON a.id_pet = p.id 
+            JOIN users u ON a.id_user = u.id 
+            LEFT JOIN municipalities m ON p.id_municipality = m.id 
+            LEFT JOIN races r ON p.id_race = r.id 
+            WHERE a.id_user = ? AND a.state != 'No aprobado'`,
+            [parseInt(id)]
+        );
 
         if (result.length > 0) {
-            return res.status(200).json(result)
+            return res.status(200).json(result);
         } else {
-            return res.status(404).json({ message: 'No se encontraron adopciones en proceso'})
+            return res.status(404).json({ message: 'No se encontraron adopciones en proceso' });
         }
 
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const getAdoption = async (req, res) => {
     try {
         const { id } = req.params;
-        const [result] = await pool.query("select p.id as id_pet, p.race, p.age, p.sterilized, p.gender, p.image, p.description, p.background, p.location, m.name as municipality, a.state, u.name, u.email, u.phone from adoptions as a join pets as p on a.id = p.id join users u on a.id_user = u.id lEFT JOIN municipalities m on p.id_municipality = m.id where a.id=?", [id])
+        const [result] = await pool.query(
+            `SELECT 
+                p.id AS id_pet, 
+                p.race, 
+                p.age, 
+                p.sterilized, 
+                p.gender, 
+                p.image, 
+                p.description, 
+                p.background, 
+                p.location, 
+                m.name AS municipality, 
+                a.state, 
+                u.name, 
+                u.email, 
+                u.phone, 
+                r.name AS race_name, 
+                r.id AS id_race 
+            FROM adoptions AS a 
+            JOIN pets AS p ON a.id_pet = p.id 
+            JOIN users u ON a.id_user = u.id 
+            LEFT JOIN municipalities m ON p.id_municipality = m.id 
+            LEFT JOIN races r ON p.id_race = r.id 
+            WHERE a.id = ?`,
+            [id]
+        );
         if (result.length > 0) {
-            return res.status(200).json(result)
+            return res.status(200).json(result);
         } else {
-            return res.status(404).json({ message: 'No se encontro la adopcion' })
+            return res.status(404).json({ message: 'No se encontró la adopción' });
         }
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const createAdoption = async (req, res) => {
     try {
-        const { id_user, id_pet, location } = req.body
-        const [result] = await pool.query("insert into adoptions (id_user, id_pet, location) values (?, ?, ?)", [id_user, id_pet, location])
+        const { id_user, id_pet, location } = req.body;
+        const [result] = await pool.query(
+            "INSERT INTO adoptions (id_user, id_pet, location) VALUES (?, ?, ?)",
+            [id_user, id_pet, location]
+        );
 
-        const [ pet ] = await pool.query("update pets set state='En proceso' where id=? ", [id_pet])
+        const [pet] = await pool.query(
+            "UPDATE pets SET state = 'En proceso' WHERE id = ?",
+            [id_pet]
+        );
 
         if (result.affectedRows > 0 && pet.affectedRows > 0) {
-            return res.status(201).json({ message: 'Adopción creada con éxito' })
+            return res.status(201).json({ message: 'Adopción creada con éxito' });
         } else {
-            return res.status(404).json({ message: 'No se pudo crear la adopción' })
+            return res.status(404).json({ message: 'No se pudo crear la adopción' });
         }
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const updateAdoption = async (req, res) => {
     try {
         const { id } = req.params;
         const { id_user, id_pet, location } = req.body;
-        const [ result ] = await pool.query('update adoptions set id_user = ?, id_pet = ?, location = ? where id = ?', [id_user, id_pet, location, id]);
+        const [result] = await pool.query(
+            'UPDATE adoptions SET id_user = ?, id_pet = ?, location = ? WHERE id = ?',
+            [id_user, id_pet, location, id]
+        );
         if (result.affectedRows > 0) {
-            return res.status(200).json({ message: 'Adopción actualizada con éxito' })
+            return res.status(200).json({ message: 'Adopción actualizada con éxito' });
         } else {
-            return res.status(404).json({ message: 'No se pudo actualizar la adopción' })
+            return res.status(404).json({ message: 'No se pudo actualizar la adopción' });
         }
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const deleteAdoption = async (req, res) => {
     try {
         const { id } = req.params;
-        const [ result ] = await pool.query('delete from adoptions where id = ?', [id]);
+        const [result] = await pool.query('DELETE FROM adoptions WHERE id = ?', [id]);
         if (result.affectedRows > 0) {
-            return res.status(200).json({ message: 'Adopción eliminada con éxito' })
+            return res.status(200).json({ message: 'Adopción eliminada con éxito' });
         } else {
-            return res.status(404).json({ message: 'No se pudo eliminar la adopción' })
+            return res.status(404).json({ message: 'No se pudo eliminar la adopción' });
         }
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const deleteAdoptionByUser = async (req, res) => {
     try {
         const { id_user, id_pet } = req.params;
-        const [ r ] = await pool.query('update pets set state=? where id=?', [1, id_pet])
-        const [ result ] = await pool.query('delete from adoptions where id_user = ? and id_pet', [id_user, id_pet]);
-
+        const [r] = await pool.query('UPDATE pets SET state = ? WHERE id = ?', [1, id_pet]);
+        const [result] = await pool.query('DELETE FROM adoptions WHERE id_user = ? AND id_pet = ?', [id_user, id_pet]);
 
         if (result.affectedRows > 0) {
-            return res.status(200).json({ message: 'Adopciones eliminadas con éxito' })
+            return res.status(200).json({ message: 'Adopciones eliminadas con éxito' });
         } else {
-            return res.status(404).json({ message: 'No se pudieron eliminar las adopciones' })
+            return res.status(404).json({ message: 'No se pudieron eliminar las adopciones' });
         }
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        return res.status(500).json({ message: error.message });
     }
-}
+};
 
 export const acceptAdoption = async (req, res) => {
     const { id, id_pet } = req.params;
 
     try {
         await pool.query('START TRANSACTION');
-        const [result] = await pool.query('UPDATE adoptions SET state = 2 WHERE id_user = ? and id_pet', [id, id_pet]);
-        
+        const [result] = await pool.query(
+            'UPDATE adoptions SET state = 2 WHERE id_user = ? AND id_pet = ?',
+            [id, id_pet]
+        );
+
         if (result.affectedRows === 0) {
             await pool.query('ROLLBACK');
             return res.status(404).json({ message: 'No se pudo aceptar la adopción, registro no encontrado' });
@@ -126,7 +215,7 @@ export const acceptAdoption = async (req, res) => {
         await pool.query('COMMIT');
         return res.status(200).json({ message: 'Adopción aceptada con éxito' });
     } catch (error) {
-        await pool.query('ROLLBACK'); 
+        await pool.query('ROLLBACK');
         return res.status(500).json({ message: error.message });
     }
 };
@@ -137,7 +226,7 @@ export const rejectAdoption = async (req, res) => {
     try {
         await pool.query('START TRANSACTION');
         const [result] = await pool.query('UPDATE adoptions SET state = 3 WHERE id_user = ? and id_pet', [id, id_pet]);
-        
+
         if (result.affectedRows === 0) {
             await pool.query('ROLLBACK');
             return res.status(404).json({ message: 'No se pudo aceptar la adopción, registro no encontrado' });
@@ -150,7 +239,7 @@ export const rejectAdoption = async (req, res) => {
         await pool.query('COMMIT');
         return res.status(200).json({ message: 'Solicitud de adopción cancelada con exito' });
     } catch (error) {
-        await pool.query('ROLLBACK'); 
+        await pool.query('ROLLBACK');
         return res.status(500).json({ message: error.message });
     }
 }

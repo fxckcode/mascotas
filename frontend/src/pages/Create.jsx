@@ -9,7 +9,7 @@ import axiosClient from "../utils/axiosClient"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
 function Create() {
-
+  const [races, setRaces] = useState([])
   const [ municipalities, setMunicipalities ] = useState([])
   const navigate = useNavigate()
   useEffect(() => {
@@ -20,6 +20,13 @@ function Create() {
             setMunicipalities(response.data)
           }
         })
+
+        await axiosClient.get('/races').then((response) => {
+          if (response.status === 200) {
+            setRaces(response.data)
+          }
+        })
+
       } catch (error) {
         console.error(error)
       }
@@ -33,7 +40,7 @@ function Create() {
     try {
       const formData = new FormData()
       formData.append('name', e.target.name_pet.value)
-      formData.append('race', e.target.race.value)
+      formData.append('id_race', e.target.race.value)
       formData.append('age', e.target.age.value)
       formData.append('sterilized', e.target.sterilized.value)
       formData.append('gender', e.target.gender.value)
@@ -72,7 +79,14 @@ function Create() {
             </div>
             <div className="w-1/2">
               <Label htmlFor="race">Raza</Label>
-              <Input name="race" type="text" required id="race" />
+              <Select name="race" required id="race" >
+                <option value="">Seleccione...</option>
+                {
+                  races.length > 0 && races.map((r) => (
+                    <option key={r.id} value={r.id}>{r.name}</option>
+                  ))
+                }
+              </Select>
             </div>
           </div>
           <div className="flex flex-row gap-5">
