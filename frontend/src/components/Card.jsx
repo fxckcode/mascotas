@@ -82,10 +82,6 @@ function Card({ pet, getData }) {
                                 <p className="w-full">{pet.gender}</p>
                             </div>
                             <div className="w-full flex flex-row">
-                                <p className="w-1/3 font-bold">Ubicación:</p>
-                                <p className="w-full">{pet.location}</p>
-                            </div>
-                            <div className="w-full flex flex-row">
                                 <p className="w-1/3 font-bold">Municipio:</p>
                                 <p className="w-full">{pet.municipality}</p>
                             </div>

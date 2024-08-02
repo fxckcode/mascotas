@@ -46,7 +46,7 @@ function Create() {
       formData.append('gender', e.target.gender.value)
       formData.append('description', e.target.description.value)
       formData.append('image', e.target.image.files[0])
-      formData.append('location', e.target.location.value)
+      formData.append('location', '')
       formData.append('id_municipality', e.target.municipality.value)
       formData.append('background', e.target.background.value)
       formData.append('vaccines', e.target.vaccines.value)
@@ -116,11 +116,7 @@ function Create() {
             </div>
           </div>
           <div className="flex flex-row gap-5">
-            <div className="w-1/2">
-              <Label htmlFor="location">Ubicación</Label>
-              <Input name="location" type="text" id="location" required />
-            </div>
-            <div className="w-1/2">
+            <div className="w-full">
               <Label htmlFor="municipality">Municipio</Label>
               <Select name="municipality" id="municipality" required> 
                 {

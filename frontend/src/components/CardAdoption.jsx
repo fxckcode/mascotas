@@ -92,10 +92,6 @@ function CardAdoption({ adoption, getData }) {
                 <p className="w-full">{adoption.gender}</p>
               </div>
               <div className="w-full flex flex-row">
-                <p className="w-1/3 font-bold">Ubicación:</p>
-                <p className="w-full">{adoption.location}</p>
-              </div>
-              <div className="w-full flex flex-row">
                 <p className="w-1/3 font-bold">Municipio:</p>
                 <p className="w-full">{adoption.municipality}</p>
               </div>
