@@ -18,6 +18,7 @@ const Adoptions = () => {
                 }
             } catch (error) {
                 // console.error(error);
+                setAdoptions([]);
             }
         }
     };

@@ -10,6 +10,7 @@ import RegisterPet from './screens/RegisterPet'
 import ConsultPet from './screens/ConsultPet'
 import HomeTabs from './screens/HomeTabs'
 import { UserProvider } from './context/UserContext'
+import ConsulPetAdoption from './screens/ConsulPetAdoption'
 
 const Stack = createNativeStackNavigator()
 const App = () => {
@@ -50,6 +51,13 @@ const App = () => {
             component={ConsultPet}
             options={{
               headerTitle: 'Adoptar mascota',
+            }}
+          />
+          <Stack.Screen 
+            name='ConsulPetAdoption'
+            component={ConsulPetAdoption}
+            options={{
+              headerTitle: 'Adopción',
             }}
           />
         </Stack.Navigator>

@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import { UserContext } from '../context/UserContext'
 
-const ConsultPet = ({ route }) => {
+const ConsultPetAdoption = ({ route }) => {
   const { pet } = route.params
   const navigation = useNavigation()
   const { user } = useContext(UserContext)
@@ -73,6 +73,25 @@ const ConsultPet = ({ route }) => {
             <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Descripcion: </Text>
             <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.description}</Text>
           </View>
+
+          <Text style={{ textAlign: 'center', color: '#9C50C4', fontSize: 25, fontWeight: '500'  }}>Datos del adoptante</Text>
+
+          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Nombre: </Text>
+            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.user_name}</Text>
+          </View>
+          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Correo: </Text>
+            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.email}</Text>
+          </View>
+          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Teléfono: </Text>
+            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.phone}</Text>
+          </View>
+
+
+
+
           <Button title={pet.state} onPress={() => handleAdopt()} buttonStyle={[style.button]} disabled={pet.state != 'Sin adoptar'} />
         </View>
       </ScrollView>
@@ -119,4 +138,4 @@ const style = StyleSheet.create({
     padding: 12
   }
 })
-export default ConsultPet
+export default ConsultPetAdoption
