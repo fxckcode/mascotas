@@ -3,7 +3,7 @@ import Button from "./Button"
 import CustomModal from "./Modal"
 import toast from "react-hot-toast"
 import axiosClient from "../utils/axiosClient"
-import { useNavigate } from "react-router-dom"
+import { Navigate, useNavigate } from "react-router-dom"
 import { generarLinkWhatsApp } from "../utils/generarLinkWhatsapp"
 
 function Card({ pet, getData }) {
@@ -21,7 +21,7 @@ function Card({ pet, getData }) {
                         setOpen(false)
                         getData()
                         const link = generarLinkWhatsApp(pet.phone_admin, mensaje)
-                        window.location.href = link
+                        window.open(link, '_blank');
                     }
                 })
             }

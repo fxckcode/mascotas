@@ -4,6 +4,7 @@ import axiosClient from '../utils/axiosClient'
 import toast from 'react-hot-toast'
 import CustomModal from './Modal'
 import { generarLinkWhatsApp } from '../utils/generarLinkWhatsapp'
+import { Navigate } from 'react-router-dom'
 
 function CardAdoption({ adoption, getData }) {
   const user = JSON.parse(localStorage.getItem('user'))
@@ -33,7 +34,7 @@ function CardAdoption({ adoption, getData }) {
             toast.success('Adopción aceptada')
             getData()
             const link = generarLinkWhatsApp(adoption.phone, mensaje)
-            window.location.href = link
+            window.open(link, '_blank');
           }
         })
       }
@@ -55,7 +56,7 @@ function CardAdoption({ adoption, getData }) {
             toast.success('Adopción rechazada')
             getData()
             const link = generarLinkWhatsApp(adoption.phone, mensaje)
-            window.location.href = link
+            window.open(link, '_blank');
           }
         })
       }
