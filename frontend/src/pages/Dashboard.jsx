@@ -6,6 +6,7 @@ import AdoptionStatusGrafica from '../components/AdoptionStatusGrafica'
 import GenderPieChart from '../components/GenderPieChart'
 import PetsStatusGraficas from '../components/PetsStatusGraficas'
 import UserContext from '../context/UserContext'
+import MascotasPorMunicipioGrafica from '../components/MunicipalityGrafica'
 function Dasboard() {
 
   const [countPets, setCountPets] = useState(0)
@@ -107,6 +108,16 @@ function Dasboard() {
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow-md text-center">
                       <PetsStatusGraficas data={pets} />
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className="py-10 bg-gray-100">
+                <div className="container mx-auto px-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className='bg-white p-6 rounded-lg shandow-md text-center'>
+                      <MascotasPorMunicipioGrafica data={pets} />
                     </div>
                   </div>
                 </div>
