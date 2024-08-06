@@ -3,7 +3,6 @@ export function generarLinkWhatsApp(numero, mensaje) {
 
     // Genera el enlace
     const enlaceWhatsApp = `https://api.whatsapp.com/send?phone=57${numero}&text=${mensajeFormato}`;
-    lo
     
     return enlaceWhatsApp;
 }
