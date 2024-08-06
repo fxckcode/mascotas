@@ -3,6 +3,7 @@ import Button from './Button'
 import axiosClient from '../utils/axiosClient'
 import toast from 'react-hot-toast'
 import CustomModal from './Modal'
+import { generarLinkWhatsApp } from '../utils/generarLinkWhatsapp'
 
 function CardAdoption({ adoption, getData }) {
   const user = JSON.parse(localStorage.getItem('user'))
@@ -25,13 +26,19 @@ function CardAdoption({ adoption, getData }) {
 
   const handleAccept = async () => {
     try {
-      if (confirm('¿Estas seguro que quieres aceptar esta adopción?')) {
+      const mensaje = prompt('Mensaje de aceptación:')
+      if (mensaje != null) {
         await axiosClient.put(`/accept/${adoption.id_user}/${adoption.id_pet}`).then((response) => {
           if (response.status == 200) {
             toast.success('Adopción aceptada')
             getData()
+            const link = generarLinkWhatsApp(adoption.phone, mensaje)
+            window.location.href = link
           }
         })
+      }
+
+      if (confirm('¿Estas seguro que quieres aceptar esta adopción?')) {
       }
     } catch (error) {
       console.error(error);
@@ -40,11 +47,15 @@ function CardAdoption({ adoption, getData }) {
 
   const handleReject = async () => {
     try {
-      if (confirm('¿Estas seguro que quieres rechazar esta adopción?')) {
+      const mensaje = prompt('Mensaje de rechazo:')
+
+      if (mensaje != null) {
         await axiosClient.put(`/reject/${adoption.id_user}/${adoption.id_pet}`).then((response) => {
           if (response.status == 200) {
             toast.success('Adopción rechazada')
             getData()
+            const link = generarLinkWhatsApp(adoption.phone, mensaje)
+            window.location.href = link
           }
         })
       }

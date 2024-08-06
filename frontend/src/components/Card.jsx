@@ -20,14 +20,14 @@ function Card({ pet, getData }) {
                         toast.success("Mascota es proceso de adopción")
                         setOpen(false)
                         getData()
+                        const link = generarLinkWhatsApp(pet.phone_admin, mensaje)
+                        window.location.href = link
                     }
                 })
-                const link = generarLinkWhatsApp(pet.phone_admin, mensaje)
-                window.location.href = link
             }
         } catch (error) {
             console.error(error);
-            toast.error("No se pudo adoptar la mascota")
+            // toast.error("No se pudo adoptar la mascota")
         }
     }
 
