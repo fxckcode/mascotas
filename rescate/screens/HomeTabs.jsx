@@ -8,6 +8,7 @@ import Adoptions from './Adoptions';
 import Profile from './Profile';
 import { UserContext } from '../context/UserContext';
 import Create from './Create';
+import RegisterPet from './RegisterPet';
 
 const Tab = createBottomTabNavigator()
 const HomeTabs = () => {
@@ -50,7 +51,7 @@ const HomeTabs = () => {
       }} />
        {
         user.role == 'administrador' ? (
-          <Tab.Screen name='Create' component={Create} options={{
+          <Tab.Screen name='Create' component={RegisterPet} options={{
             headerStyle: {
               backgroundColor: '#C683EA',
             },

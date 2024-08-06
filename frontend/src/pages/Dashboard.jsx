@@ -83,7 +83,7 @@ function Dasboard() {
         </section>
 
         {
-          user.role == 'administrador' && (
+          user.role == 'administrador' ? (
             <>
               <section className="py-10 bg-gray-100">
                 <div className="container mx-auto px-4">
@@ -111,7 +111,7 @@ function Dasboard() {
                 </div>
               </section>
             </>
-          )
+          ) : null
         }
 
 
