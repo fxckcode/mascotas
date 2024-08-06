@@ -1,5 +1,6 @@
 export function generarLinkWhatsApp(numero, mensaje) {
     // Asegúrate de que el número esté en formato internacional
+    numero = toString(numero);
     const numeroFormato = numero.replace(/\D/g, ''); // Elimina cualquier carácter no numérico
     const mensajeFormato = encodeURIComponent(mensaje); // Codifica el mensaje para la URL
 
