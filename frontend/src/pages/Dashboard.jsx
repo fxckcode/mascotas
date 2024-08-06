@@ -12,7 +12,7 @@ function Dasboard() {
   const [countAdoptions, setCountAdoptions] = useState(0)
   const [pets, setPets] = useState([])
   const [adoptions, setAdoptions] = useState([])
-  const { user } = useContext(UserContext)
+  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,6 +34,7 @@ function Dasboard() {
     }
     fetchData()
   }, [])
+
 
   return (
     <Base title="Dashboard | Petfy">
