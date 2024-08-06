@@ -14,7 +14,7 @@ function Card({ pet, getData }) {
     const handleAdopt = async (id) => {
         try {
             const mensaje = prompt('¿Por qué quieres adoptar a esta mascota?')
-            if (mensaje) {
+            if (mensaje != null) {
                 await axiosClient.post('/adoptions', { id_user: user.id, id_pet: id }).then((response) => {
                     if (response.status == 201) {
                         toast.success("Mascota es proceso de adopción")
