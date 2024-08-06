@@ -29,7 +29,9 @@ function CardAdoption({ adoption, getData }) {
     try {
       const mensaje = prompt('Mensaje de aceptación:')
       if (mensaje != null) {
-        await axiosClient.put(`/accept/${adoption.id_user}/${adoption.id_pet}`).then((response) => {
+        await axiosClient.put(`/accept/${adoption.id_user}/${adoption.id_pet}`, {
+          description_admin: mensaje
+        }).then((response) => {
           if (response.status == 200) {
             toast.success('Adopción aceptada')
             getData()
@@ -51,7 +53,9 @@ function CardAdoption({ adoption, getData }) {
       const mensaje = prompt('Mensaje de rechazo:')
 
       if (mensaje != null) {
-        await axiosClient.put(`/reject/${adoption.id_user}/${adoption.id_pet}`).then((response) => {
+        await axiosClient.put(`/reject/${adoption.id_user}/${adoption.id_pet}`,
+          { description_admin: mensaje }
+        ).then((response) => {
           if (response.status == 200) {
             toast.success('Adopción rechazada')
             getData()
@@ -129,6 +133,15 @@ function CardAdoption({ adoption, getData }) {
                 <div className="w-full flex flex-row">
                   <p className="w-1/3 font-bold">Telefono:</p>
                   <p className="w-full">{adoption.phone}</p>
+                </div>
+                <div className="w-full flex flex-row">
+                  <p className="w-1/3 font-bold">Mensaje:</p>
+                  <p className="w-full">{adoption.description_user}</p>
+                </div>
+                <h2 className='text-xl font-semibold text-center'>Respuesta</h2>
+                <div className="w-full flex flex-row">
+                  <p className="w-1/3 font-bold">Mensaje:</p>
+                  <p className="w-full">{adoption.description_admin}</p>
                 </div>
               </div>
 

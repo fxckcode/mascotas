@@ -25,7 +25,9 @@ export const getAdoptions = async (req, res) => {
                 u.phone, 
                 u.id AS id_user, 
                 r.name AS race_name, 
-                r.id AS id_race 
+                r.id AS id_race,
+                a.description_admin,
+                a.description_user
             FROM adoptions AS a 
             JOIN pets AS p ON a.id_pet = p.id 
             JOIN users u ON a.id_user = u.id 
@@ -70,7 +72,9 @@ export const getMyAdoption = async (req, res) => {
                 u.email, 
                 u.phone, 
                 r.name AS race_name, 
-                r.id AS id_race 
+                r.id AS id_race,
+                a.description_admin,
+                a.description_user
             FROM adoptions AS a 
             JOIN pets AS p ON a.id_pet = p.id 
             JOIN users u ON a.id_user = u.id 
@@ -140,12 +144,12 @@ export const getAdoption = async (req, res) => {
 export const createAdoption = async (req, res) => {
     try {
         // Extrae los datos de la solicitud
-        const { id_user, id_pet, location } = req.body;
+        const { id_user, id_pet, location, description_user } = req.body;
 
         // Ejecuta una consulta SQL para insertar una nueva adopción
         const [result] = await pool.query(
-            "INSERT INTO adoptions (id_user, id_pet, location) VALUES (?, ?, ?)",
-            [id_user, id_pet, location]
+            "INSERT INTO adoptions (id_user, id_pet, location, description_user) VALUES (?, ?, ?, ?)",
+            [id_user, id_pet, location, description_user]
         );
 
         // Actualiza el estado de la mascota a 'En proceso'
@@ -235,6 +239,7 @@ export const deleteAdoptionByUser = async (req, res) => {
 // Acepta una adopción y actualiza el estado de la mascota
 export const acceptAdoption = async (req, res) => {
     const { id, id_pet } = req.params;
+    const { description_admin } = req.body;
 
     try {
         // Inicia una transacción
@@ -242,8 +247,8 @@ export const acceptAdoption = async (req, res) => {
 
         // Actualiza el estado de la adopción a 'Aceptada'
         const [result] = await pool.query(
-            'UPDATE adoptions SET state = 2 WHERE id_user = ? AND id_pet = ?',
-            [id, id_pet]
+            'UPDATE adoptions SET state = 2, description_admin=? WHERE id_user = ? AND id_pet = ?',
+            [description_admin, id, id_pet]
         );
 
         // Verifica si la adopción fue actualizada
@@ -271,13 +276,13 @@ export const acceptAdoption = async (req, res) => {
 // Rechaza una adopción y actualiza el estado de la mascota
 export const rejectAdoption = async (req, res) => {
     const { id, id_pet } = req.params;
-
+    const { description_admin } = req.body;
     try {
         // Inicia una transacción
         await pool.query('START TRANSACTION');
 
         // Actualiza el estado de la adopción a 'Rechazada'
-        const [result] = await pool.query('UPDATE adoptions SET state = 3 WHERE id_user = ? AND id_pet = ?', [id, id_pet]);
+        const [result] = await pool.query('UPDATE adoptions SET state = 3, description_admin=? WHERE id_user = ? AND id_pet = ?', [description_admin, id, id_pet]);
 
         // Verifica si la adopción fue actualizada
         if (result.affectedRows === 0) {
