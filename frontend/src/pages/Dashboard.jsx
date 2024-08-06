@@ -4,11 +4,12 @@ import axiosClient from '../utils/axiosClient'
 import PetsGrafica from '../components/PetsGrafica'
 import AdoptionStatusGrafica from '../components/AdoptionStatusGrafica'
 import GenderPieChart from '../components/GenderPieChart'
+import PetsStatusGraficas from '../components/PetsStatusGraficas'
 
 function Dasboard() {
 
-  const [ countPets, setCountPets ] = useState(0)
-  const [ countAdoptions, setCountAdoptions ] = useState(0)
+  const [countPets, setCountPets] = useState(0)
+  const [countAdoptions, setCountAdoptions] = useState(0)
   const [pets, setPets] = useState([])
   const [adoptions, setAdoptions] = useState([])
   useEffect(() => {
@@ -97,8 +98,13 @@ function Dasboard() {
         <section className="py-10 bg-gray-100">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-             <GenderPieChart data={pets} />
-          </div>
+              <div className='bg-white p-6 rounded-lg shandow-md text-center'>
+                <GenderPieChart data={pets} />
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md text-center">
+                <PetsStatusGraficas data={pets} />
+              </div>
+            </div>
           </div>
         </section>
 

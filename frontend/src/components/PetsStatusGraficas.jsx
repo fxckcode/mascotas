@@ -1,6 +1,6 @@
 import { BarChart } from "@tremor/react";
 
-const AdoptionStatusGrafica = ({ data }) => {
+const PetsStatusGraficas = ({ data }) => {
   // Agrupar los perros por estado de adopción
   const estadoDeAdopcion = data.reduce((acc, perro) => {
     const estado = perro.state || 'Sin estado';
@@ -38,10 +38,10 @@ const AdoptionStatusGrafica = ({ data }) => {
 
   return (
     <div className="w-full h-full">
-      <h2 className="text-xl font-semibold text-black">Mascotas por estado de Adopción</h2>
+      <h2 className="text-xl font-semibold text-black">Mascotas por estado</h2>
       <BarChart {...barChartProps} />
     </div>
   );
 };
 
-export default AdoptionStatusGrafica;
+export default PetsStatusGraficas;

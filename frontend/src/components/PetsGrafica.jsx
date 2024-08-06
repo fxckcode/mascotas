@@ -38,7 +38,7 @@ const PetsGrafica = ({ data }) => {
 
   return (
     <div className="w-full h-full">
-      <Title className="text-3xl font-semibold">Perros por raza</Title>
+      <h2 className="text-xl font-semibold text-black">Mascotas por raza</h2>
       <BarChart {...barChartProps} />
     </div>
   );
