@@ -4,13 +4,15 @@ import Input from "../components/Input"
 import Select from "../components/Select"
 import TextArea from "../components/TextArea"
 import Button from "../components/Button"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import axiosClient from "../utils/axiosClient"
 import toast from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
+import UserContext from "../context/UserContext"
 function Create() {
   const [races, setRaces] = useState([])
   const [ municipalities, setMunicipalities ] = useState([])
+  const { user } = useContext(UserContext)
   const navigate = useNavigate()
   useEffect(() => {
     const fetchMunicipalities = async () => {
@@ -47,6 +49,7 @@ function Create() {
       formData.append('description', e.target.description.value)
       formData.append('image', e.target.image.files[0])
       formData.append('location', '')
+      formData.append('phone_admin', user.phone)
       formData.append('id_municipality', e.target.municipality.value)
       formData.append('background', e.target.background.value)
       formData.append('vaccines', e.target.vaccines.value)

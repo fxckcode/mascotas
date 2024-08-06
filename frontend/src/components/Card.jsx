@@ -4,6 +4,7 @@ import CustomModal from "./Modal"
 import toast from "react-hot-toast"
 import axiosClient from "../utils/axiosClient"
 import { useNavigate } from "react-router-dom"
+import { generarLinkWhatsApp } from "../utils/generarLinkWhatsapp"
 
 function Card({ pet, getData }) {
     const [open, setOpen] = useState(false)
@@ -12,7 +13,8 @@ function Card({ pet, getData }) {
     const navigate = useNavigate()
     const handleAdopt = async (id) => {
         try {
-            if (confirm('¿Estas que quieres iniciar el proceso de adopción?')) {
+            const mensaje = prompt('¿Por qué quieres adoptar a esta mascota?')
+            if (mensaje) {
                 await axiosClient.post('/adoptions', { id_user: user.id, id_pet: id }).then((response) => {
                     if (response.status == 201) {
                         toast.success("Mascota es proceso de adopción")
@@ -20,6 +22,8 @@ function Card({ pet, getData }) {
                         getData()
                     }
                 })
+                const link = generarLinkWhatsApp(pet.phone_admin, mensaje)
+                window.location.href = link
             }
         } catch (error) {
             console.error(error);

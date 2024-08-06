@@ -16,6 +16,7 @@ export const getAdoptions = async (req, res) => {
                 p.background, 
                 p.vaccines, 
                 p.location, 
+                p.phone_admin,
                 m.name AS municipality, 
                 a.state, 
                 u.name AS user_name, 

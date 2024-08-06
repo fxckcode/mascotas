@@ -53,7 +53,7 @@ export const getPets = async (req, res) => {
 export const createPets = async (req, res) => {
   try {
     // Extrae los datos de la mascota del cuerpo de la solicitud
-    const { name, id_race, age, sterilized, gender, description, background, location, id_municipality, vaccines } = req.body;
+    const { name, id_race, age, sterilized, gender, description, background, location, id_municipality, vaccines, phone_admin } = req.body;
 
     let image = null;
 
@@ -64,8 +64,8 @@ export const createPets = async (req, res) => {
 
     // Realiza una consulta SQL para insertar una nueva mascota
     const [result] = await pool.query(
-      'INSERT INTO pets (name, id_race, age, sterilized, gender, image, description, background, location, id_municipality, vaccines) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [name, id_race, age, sterilized, gender, image, description, background, location, id_municipality, vaccines]
+      'INSERT INTO pets (name, id_race, age, sterilized, gender, image, description, background, location, id_municipality, vaccines, phone_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [name, id_race, age, sterilized, gender, image, description, background, location, id_municipality, vaccines, phone_admin]
     );
 
     // Verifica si la inserción fue exitosa
@@ -142,7 +142,7 @@ export const updatePet = async (req, res) => {
       background: background ?? oldPet[0].background,
       location: location ?? oldPet[0].location,
       id_municipality: id_municipality ?? oldPet[0].id_municipality,
-      vaccines: vaccines ?? oldPet[0].vaccines
+      vaccines: vaccines ?? oldPet[0].vaccines,
     };
 
     // Realiza una consulta SQL para actualizar los datos de la mascota
