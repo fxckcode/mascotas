@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { Input } from '@rneui/base'
 import { Button } from 'react-native-elements'
-import { faAddressCard, faEnvelope, faLock, faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faAddressCard, faEnvelope, faHashtag, faLock, faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useNavigation } from '@react-navigation/native'
 import axiosClient from '../utils/axiosClient'
 
@@ -13,6 +13,7 @@ const SingUp = () => {
   const [password, setPassword] = useState('')
   const [phone, setPhone] = useState('')
   const navigation = useNavigation()
+  const [ identification, setIdentification ] = useState('')
 
   const handleSubmit = async () => {
     try {
@@ -20,10 +21,11 @@ const SingUp = () => {
         name,
         email,
         password,
-        phone
+        phone,
+        identification
       }
       
-      if (name == '' || email == '' || password == '' || phone == '') {
+      if (name == '' || email == '' || password == '' || phone == '' || identification == '') {
         ToastAndroid.show('Todos los campos son obligatorios', ToastAndroid.SHORT)
         return
       }
@@ -67,6 +69,17 @@ const SingUp = () => {
           placeholderTextColor={'#ffffff'}
           value={email}
           onChangeText={setEmail}
+        />
+        <Input leftIcon={() => <FontAwesomeIcon icon={faHashtag} size={20} style={{ color: '#ffffff', marginLeft: 10 }} />}
+          inputContainerStyle={style.inputStyle}
+          labelStyle={style.labelStyle}
+          label="Cédula"
+          placeholder='Cédula'
+          style={{ color: '#ffffff' }}
+          placeholderTextColor={'#ffffff'}
+          value={identification}
+          onChangeText={setIdentification}
+          keyboardType='number-pad'
         />
         <Input leftIcon={() => <FontAwesomeIcon icon={faLock} size={20} style={{ color: '#ffffff', marginLeft: 10 }} />}
           inputContainerStyle={style.inputStyle}
