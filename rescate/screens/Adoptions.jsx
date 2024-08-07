@@ -12,10 +12,18 @@ const Adoptions = () => {
     const getAdoptions = async () => {
         if (user) {
             try {
-                const response = await axiosClient.get(`/adoption/user/${user.id}`);
-                if (response.status === 200) {
-                    setAdoptions(response.data);
+                if (user.role == 'administrador') {
+                    const response = await axiosClient.get(`/adoptions`);
+                    if (response.status === 200) {
+                        setAdoptions(response.data);
+                    }
+                } else {
+                    const response = await axiosClient.get(`/adoption/user/${user.id}`);
+                    if (response.status === 200) {
+                        setAdoptions(response.data);
+                    }
                 }
+        
             } catch (error) {
                 // console.error(error);
                 setAdoptions([]);
@@ -41,7 +49,7 @@ const Adoptions = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <View style={{ width: '100%', paddingHorizontal: 10, marginTop: 10, display: 'flex', flexDirection: 'column', gap: 5 }}>
-                    <Text style={{ fontSize: 20, color: 'black', fontWeight: 500 }}>Mis adopciones</Text>
+                    <Text style={{ fontSize: 20, color: 'black', fontWeight: 500, marginBottom: 10 }}>Adopciones en proceso</Text>
                     <View style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                         {
                             adoptions.length > 0 ? adoptions.map((adoption, index) => (

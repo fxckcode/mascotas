@@ -1,11 +1,5 @@
 import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView, ToastAndroid } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { Input } from '@rneui/base'
-import { Button } from 'react-native-elements'
-import { faTransgender, faPaw, faHeart, faPenToSquare, faUser } from '@fortawesome/free-solid-svg-icons'
-import axiosClient from '../utils/axiosClient'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import { UserContext } from '../context/UserContext'
 
@@ -13,22 +7,6 @@ const ConsultPetAdoption = ({ route }) => {
   const { pet } = route.params
   const navigation = useNavigation()
   const { user } = useContext(UserContext)
-
-  const handleAdopt = async () => {
-    try {
-      await axiosClient.post('/adoptions', { id_user: user.id, id_pet: pet.id }).then((response) => {
-        if (response.status == 201) {
-          ToastAndroid.show('Adopción en proceso', ToastAndroid.SHORT)
-          navigation.navigate('HomeTabs', {
-            screen: 'Home',
-            params: { screen: 'Home' }
-          })
-        }
-      })
-    } catch (error) {
-      console.error(pet);
-    }
-  }
 
   return (
     <SafeAreaView style={style.container}>
@@ -58,10 +36,6 @@ const ConsultPetAdoption = ({ route }) => {
             <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.gender}</Text>
           </View>
           <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Ubicación: </Text>
-            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.location}</Text>
-          </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Municipio: </Text>
             <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.municipality}</Text>
           </View>
@@ -74,7 +48,7 @@ const ConsultPetAdoption = ({ route }) => {
             <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.description}</Text>
           </View>
 
-          <Text style={{ textAlign: 'center', color: '#9C50C4', fontSize: 25, fontWeight: '500'  }}>Datos del adoptante</Text>
+          <Text style={{ textAlign: 'center', color: '#9C50C4', fontSize: 18, fontWeight: '500' }}>Datos del adoptante</Text>
 
           <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
             <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Nombre: </Text>
@@ -88,11 +62,15 @@ const ConsultPetAdoption = ({ route }) => {
             <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Teléfono: </Text>
             <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.phone}</Text>
           </View>
-
-
-
-
-          <Button title={pet.state} onPress={() => handleAdopt()} buttonStyle={[style.button]} disabled={pet.state != 'Sin adoptar'} />
+          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Mensaje: </Text>
+            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.description_user}</Text>
+          </View>
+          <Text style={{ textAlign: 'center', color: '#9C50C4', fontSize: 18, fontWeight: '500' }}>Respuesta</Text>
+          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Mensaje: </Text>
+            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.description_admin}</Text>
+          </View>
         </View>
       </ScrollView>
 

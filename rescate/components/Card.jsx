@@ -1,107 +1,246 @@
-// Importa useNavigation de @react-navigation/native para la navegación entre pantallas
 import { useNavigation } from '@react-navigation/native';
-// Importa el componente Button de @rneui/base
 import { Button } from '@rneui/base';
-// Importa componentes de React Native
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-// Importa UserContext desde el contexto de la aplicación
+import { View, Text, TouchableOpacity, Image, StyleSheet, Alert, ToastAndroid, Modal, TextInput, Linking } from 'react-native';
 import { UserContext } from '../context/UserContext';
-// Importa useContext desde React
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import axiosClient from '../utils/axiosClient';
+import { Input } from 'react-native-elements';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { generarLinkWhatsApp } from '../utils/generarLinkWhatsapp';
 
-// Define el componente funcional Card que recibe una prop llamada pet
 const Card = ({ pet }) => {
-    // Usa useContext para acceder al contexto de usuario
-    const user = useContext(UserContext);
-    // Usa useNavigation para manejar la navegación
+    const { user } = useContext(UserContext);
     const navigation = useNavigation();
+    const [modalVisible, setModalVisible] = useState(false);
+    const [ mensaje, setMensaje ] = useState('')
 
-    // Renderiza la tarjeta de mascota
+    const handleDelete = async () => {
+        try {
+            await axiosClient.delete(`/pet/${pet.id}`).then((response) => {
+                if (response.status == 200) {
+                    ToastAndroid.show('Mascota eliminada con éxito', ToastAndroid.SHORT);
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const openModal = () => {
+        setModalVisible(true)
+    }
+
+    const handleAdopt = async (id) => {
+        try {
+            await axiosClient.post('/adoptions', { id_user: user.id, id_pet: pet.id, description_user: mensaje }).then((response) => {
+                if (response.status == 201) {
+                    ToastAndroid.show('Adopción en proceso', ToastAndroid.SHORT);
+                    setModalVisible(false)
+                    const link = generarLinkWhatsApp(pet.phone_admin, mensaje)
+                    Linking.openURL(link)
+                }
+            })
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleCancel = () => {
+        setModalVisible(false)
+    }
+
     return (
-        // TouchableOpacity es un componente que reacciona a las pulsaciones del usuario
-        <TouchableOpacity 
-            style={{ 
-                width: '45%', 
-                height: 250, 
-                backgroundColor: '#e6c6f7', 
-                borderRadius: 10, 
-                padding: 10, 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: 5 
-            }} 
-            onPress={() => navigation.navigate('ConsultPet', { pet: pet })} // Navega a la pantalla ConsultPet con los detalles de la mascota
+        <TouchableOpacity
+            style={styles.card}
+            onPress={() => navigation.navigate('ConsultPet', { pet: pet })}
         >
-            {/* Muestra la imagen de la mascota */}
-            <Image 
-                src={`http://10.0.2.2:3333/public/img/${pet.image}`} 
-                style={{ width: "100%", height: 150 }} 
-                resizeMode='contain' 
-            />
-            {/* Muestra el nombre y la raza de la mascota */}
-            <View 
-                style={{ 
-                    width: '100%', 
-                    height: 45, 
-                    display: 'flex', 
-                    flexDirection: 'row', 
-                    justifyContent: 'space-between', 
-                    alignItems: 'center' 
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
                 }}
             >
-                <View style={{ width: '60%' }}>
-                    <Text style={{ fontSize: 16, fontWeight: '500' }}>{pet.name}</Text>
-                    <Text style={{ fontSize: 14, fontWeight: '400' }}>{pet.race_name}, {pet.age}</Text>
-                </View>
-                <View>
-                    <Text style={{ fontSize: 14, fontWeight: '400' }}>{pet.gender}</Text>
-                </View>
-            </View>
-            {
-                // Muestra diferentes botones según el rol del usuario
-                user.role === 'usuario' ? (
-                    // Si el rol es 'usuario', muestra el botón de adoptar
-                    <Button
-                        title={pet.state === 'En proceso' ? 'En proceso' : pet.state === 'Adoptado' ? 'Adoptado' : 'Adoptar'}
-                        onPress={() => handleAdopt(pet.id)} // Llama a handleAdopt con el ID de la mascota
-                        disabled={pet.state === 'En proceso' || pet.state === 'Adoptado'} // Deshabilita el botón si la mascota está en proceso o adoptada
+                <View style={styles.modalView}>
+                    <Text style={styles.modalTitle}>¿Por qué quieres adoptarl@?</Text>
+                    <Input
+                        leftIcon={() => <FontAwesomeIcon icon={faPenToSquare} size={20} style={{ color: '#9C50C4' }} />}
+                        inputContainerStyle={styles.inputDescripcion}
+                        labelStyle={styles.labelStyle}
+                        label="Mensaje"
+                        placeholder='Mensaje'
+                        style={{ color: '#9C50C4' }}
+                        placeholderTextColor={'#9C50C4'}
+                        multiline={true}
+                        value={mensaje}
+                        onChangeText={(text) => setMensaje(text)}
                     />
-                ) : (
-                    // Si el rol no es 'usuario'o sea que es 'administrador', muestra los botones de editar y eliminar
-                    <View style={styles.container}>
-                        <Text style={styles.stateText}>{pet.state}</Text>
+                    <View style={styles.buttonContainer}>
+                        <Button title="Adoptar" onPress={handleAdopt} buttonStyle={styles.button} />
+                        <Button title="Cancelar" onPress={handleCancel} buttonStyle={styles.button}  />
+                    </View>
+                </View>
+            </Modal>
+            <Image
+                source={{ uri: `http://10.0.2.2:3333/public/img/${pet.image}` }}
+                style={styles.image}
+                resizeMode='cover'
+            />
+            <View style={styles.details}>
+                <Text style={styles.name}>{pet.name}</Text>
+                <Text style={styles.info}>{pet.race_name}, {pet.age}</Text>
+                <Text style={styles.gender}>{pet.gender}</Text>
+            </View>
+            {user.role == 'usuario' ? (
+                <Button
+                    title={pet.state === 'En proceso' ? 'En proceso' : pet.state === 'Adoptado' ? 'Adoptado' : 'Adoptar'}
+                    onPress={() => openModal()}
+                    disabled={pet.state === 'En proceso' || pet.state === 'Adoptado'}
+                    buttonStyle={styles.button}
+                />
+            ) : (
+                <View style={styles.adminActions}>
+                    <Text style={styles.stateText}>{pet.state}</Text>
+                    <View style={styles.actionButtons}>
                         <Button
                             title="Editar"
-                            color="purple"
-                            onPress={() => navigation.navigate('Edit', { id: pet.id })} // Navega a la pantalla Edit con el ID de la mascota
+                            buttonStyle={styles.editButton}
+                            onPress={() => navigation.navigate('EditPet', { pet })}
                         />
                         <Button
                             title="Eliminar"
-                            color="red"
-                            onPress={() => alert.alert('Confirmar', '¿Estás seguro de que deseas eliminar?', [
+                            buttonStyle={styles.deleteButton}
+                            onPress={() => Alert.alert('Confirmar', '¿Estás seguro de que deseas eliminar?', [
                                 { text: 'Cancelar', style: 'cancel' },
-                                { text: 'Eliminar', onPress: handleDelete }, // Llama a handleDelete cuando se confirma la eliminación
+                                { text: 'Eliminar', onPress: handleDelete },
                             ])}
                         />
                     </View>
-                )
-            }
+                </View>
+            )}
         </TouchableOpacity>
     );
-}
+};
 
-// Define los estilos para el componente
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row', // Los hijos se alinean en fila
-        justifyContent: 'space-around', // Espacio alrededor de los hijos
-        alignItems: 'center', // Alinea los hijos al centro verticalmente
-        width: '100%', // El contenedor ocupa el ancho completo
+    card: {
+        width: '50%',
+        height: 330,
+        backgroundColor: '#f9f9f9',
+        borderRadius: 12,
+        padding: 10,
+        marginBottom: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 3,
+        overflow: 'hidden',
+        justifyContent: 'space-between',
+    },
+    image: {
+        width: '100%',
+        height: 150,
+        borderRadius: 10,
+    },
+    details: {
+        marginVertical: 10,
+    },
+    name: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    info: {
+        fontSize: 14,
+        color: '#666',
+    },
+    gender: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#999',
+    },
+    userButton: {
+        borderRadius: 20,
+        backgroundColor: '#6c63ff',
+        marginTop: 10,
+    },
+    adminActions: {
+        marginTop: 5,
     },
     stateText: {
-        fontWeight: 'bold', // Texto en negrita
+        fontWeight: 'bold',
+        color: '#333',
+        textAlign: 'center'
     },
-})
+    actionButtons: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 10,
+        width: '100%',
+    },
+    editButton: {
+        backgroundColor: '#4caf50',
+        borderRadius: 10,
+    },
+    deleteButton: {
+        backgroundColor: '#f44336',
+        borderRadius: 10,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    modalTitle: {
+        fontSize: 18,
+        marginBottom: 10,
+    },
+    input: {
+        width: '100%',
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 10,
+        padding: 10,
+    },
+    buttonContainer: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    inputDescripcion: {
+        borderColor: '#9C50C4',
+        borderWidth: 1,
+        borderRadius: 5,
+        color: '#9C50C4',
+        padding: 10,
+    },
+    labelStyle: {
+        fontWeight: 'normal',
+        marginBottom: 10,
+        color: '#9C50C4',
+    },
+    button: {
+        borderRadius: 10,
+        backgroundColor: '#9C50C4',
+        padding: 5,
+    },
+});
 
-// Exporta el componente para su uso en otros lugares
 export default Card;

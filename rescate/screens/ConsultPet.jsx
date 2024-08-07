@@ -1,122 +1,120 @@
-import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView, ToastAndroid } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { Input } from '@rneui/base'
-import { Button } from 'react-native-elements'
-import { faTransgender, faPaw, faHeart, faPenToSquare, faUser } from '@fortawesome/free-solid-svg-icons'
-import axiosClient from '../utils/axiosClient'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useNavigation } from '@react-navigation/native'
-import { UserContext } from '../context/UserContext'
+import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView, ToastAndroid } from 'react-native';
+import React, { useContext } from 'react';
+import { Button } from 'react-native-elements';
+import axiosClient from '../utils/axiosClient';
+import { useNavigation } from '@react-navigation/native';
+import { UserContext } from '../context/UserContext';
 
 const ConsultPet = ({ route }) => {
-  const { pet } = route.params
-  const navigation = useNavigation()
-  const { user } = useContext(UserContext)
+  const { pet } = route.params;
+  const navigation = useNavigation();
+  const { user } = useContext(UserContext);
 
   const handleAdopt = async () => {
     try {
       await axiosClient.post('/adoptions', { id_user: user.id, id_pet: pet.id }).then((response) => {
         if (response.status == 201) {
-          ToastAndroid.show('Adopción en proceso', ToastAndroid.SHORT)
-          navigation.navigate('HomeTabs', {
-            screen: 'Home',
-            params: { screen: 'Home' }
-          })
+          ToastAndroid.show('Adopción en proceso', ToastAndroid.SHORT);
+          navigation.navigate('HomeTabs', { screen: 'Home' });
         }
-      })
+      });
     } catch (error) {
-      console.error(pet);
+      console.error(error);
     }
-  }
+  };
 
   return (
-    <SafeAreaView style={style.container}>
-      <ScrollView>
-        <View style={style.content}>
-          <Image src={`http://10.0.2.2:3333/public/img/${pet.image}`} style={{ width: '100%', height: 200 }} resizeMode='contain' />
-          <View>
-            <Text style={{ color: '#9C50C4', fontSize: 30, fontWeight: '700' }}>{pet.name}</Text>
-          </View>
-          <View>
-            <Text style={{ color: '#9C50C4', fontSize: 20, fontWeight: '500' }}>{pet.race_name}</Text>
-          </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Edad:</Text>
-            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.age}</Text>
-          </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Esterilizad@: </Text>
-            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.sterilized}</Text>
-          </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Vaccines: </Text>
-            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.vaccines}</Text>
-          </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Género: </Text>
-            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.gender}</Text>
-          </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Ubicación: </Text>
-            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.location}</Text>
-          </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Municipio: </Text>
-            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.municipality}</Text>
-          </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Antecedentes: </Text>
-            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.background}</Text>
-          </View>
-          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
-            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Descripcion: </Text>
-            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.description}</Text>
-          </View>
-          <Button title={pet.state} onPress={() => handleAdopt()} buttonStyle={[style.button]} disabled={pet.state != 'Sin adoptar'} />
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Image
+          source={{ uri: `http://10.0.2.2:3333/public/img/${pet.image}` }}
+          style={styles.image}
+          resizeMode="contain"
+        />
+        <Text style={styles.title}>{pet.name}</Text>
+        <Text style={styles.subtitle}>{pet.race_name}</Text>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Edad:</Text>
+          <Text style={styles.infoValue}>{pet.age}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Esterilizado:</Text>
+          <Text style={styles.infoValue}>{pet.sterilized ? 'Sí' : 'No'}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Vacunas:</Text>
+          <Text style={styles.infoValue}>{pet.vaccines}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Género:</Text>
+          <Text style={styles.infoValue}>{pet.gender}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Municipio:</Text>
+          <Text style={styles.infoValue}>{pet.municipality}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Antecedentes:</Text>
+          <Text style={styles.infoValue}>{pet.background}</Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.infoLabel}>Descripción:</Text>
+          <Text style={styles.infoValue}>{pet.description}</Text>
         </View>
       </ScrollView>
-
     </SafeAreaView>
-  )
-}
+  );
+};
 
-const style = StyleSheet.create({
-  inputStyle: {
-    padding: 2,
-    borderColor: '#9C50C4',
-    borderWidth: 1,
-    borderRadius: 5,
-    color: '#9C50C4',
-
-  },
-  inputDescripcion: {
-    borderColor: '#9C50C4',
-    borderWidth: 1,
-    borderRadius: 5,
-    color: '#9C50C4',
-    padding: 20,
-
-  },
+const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#f4f4f4',
   },
-  content: {
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    gap: 5,
+  scrollContainer: {
     padding: 20,
+    alignItems: 'center',
   },
-  labelStyle: {
-    fontWeight: 'normal',
-    color: '#9C50C4'
+  image: {
+    width: '100%',
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#9C50C4',
+    marginBottom: 5,
+  },
+  subtitle: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: '#9C50C4',
+    marginBottom: 15,
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    marginBottom: 10,
+  },
+  infoLabel: {
+    width: '40%',
+    fontSize: 20,
+    fontWeight: '500',
+    color: '#9C50C4',
+  },
+  infoValue: {
+    fontSize: 18,
+    color: '#333',
   },
   button: {
     borderRadius: 10,
     backgroundColor: '#9C50C4',
-    width: 350,
-    padding: 12
-  }
-})
-export default ConsultPet
+    width: '100%',
+    padding: 12,
+    marginVertical: 20,
+  },
+});
+
+export default ConsultPet;

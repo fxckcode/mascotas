@@ -16,7 +16,6 @@ const Home = () => {
         }
       })
     } catch (error) {
-      console.error(error);
     }
   }
 
