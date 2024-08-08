@@ -15,14 +15,15 @@ const Adoptions = () => {
         if (user) {
             try {
 
-                user.role == 'administrador' ? (
-                    await axiosClient.get(`/adoptions`).then((response) => {
+                user.role == 'usuario' ? (
+
+                    await axiosClient.get(`/adoption/user/${user.id}`).then((response) => {
                         if (response.status === 200) {
                             setAdoptions(response.data);
                         }
                     })
                 ) : (
-                    await axiosClient.get(`/adoption/user/${user.id}`).then((response) => {
+                    await axiosClient.get(`/adoptions`).then((response) => {
                         if (response.status === 200) {
                             setAdoptions(response.data);
                         }
@@ -30,8 +31,7 @@ const Adoptions = () => {
                 )
 
             } catch (error) {
-                // console.error(error);
-                setAdoptions([]);
+                console.error(error);
             }
         }
     };
