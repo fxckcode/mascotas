@@ -22,8 +22,11 @@ const CardAdoption = ({ pet }) => {
   };
 
   const handleModalAction = async () => {
+    console.log(actionType, pet.id_user, pet.id_pet);
+    
     try {
       await axiosClient.put(`/${actionType}/${pet.id_user}/${pet.id_pet}`, { description_admin: mensaje }).then((response) => {
+        
         if (response.status === 200) {
           ToastAndroid.show(`Gestión hecha con exito`, ToastAndroid.SHORT);
           setModalVisible(false);
