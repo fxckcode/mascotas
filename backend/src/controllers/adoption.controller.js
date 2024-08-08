@@ -25,9 +25,9 @@ export const getAdoptions = async (req, res) => {
                 u.phone, 
                 r.name AS race_name, 
                 r.id AS id_race,
-                c.name AS category_name,  // Agrega nombre de categoría
                 a.description_admin,
-                a.description_user
+                a.description_user,
+                c.name AS category_name
             FROM adoptions AS a 
             JOIN pets AS p ON a.id_pet = p.id 
             JOIN users u ON a.id_user = u.id 
@@ -74,15 +74,15 @@ export const getMyAdoption = async (req, res) => {
                 u.phone, 
                 r.name AS race_name, 
                 r.id AS id_race,
-                c.name AS category_name,  // Agrega nombre de categoría
                 a.description_admin,
-                a.description_user
+                a.description_user,
+                c.name AS category_name
             FROM adoptions AS a 
             JOIN pets AS p ON a.id_pet = p.id 
             JOIN users u ON a.id_user = u.id 
             LEFT JOIN municipalities m ON p.id_municipality = m.id 
             LEFT JOIN races r ON p.id_race = r.id 
-            LEFT JOIN categories c ON p.id_category = c.id  // Une con la tabla de categorías
+            LEFT JOIN categories c ON p.id_category = c.id
             WHERE a.id_user = ? AND a.state != 'No aprobado'`,
             [parseInt(id)]
         );
@@ -123,13 +123,13 @@ export const getAdoption = async (req, res) => {
                 u.phone, 
                 r.name AS race_name, 
                 r.id AS id_race,
-                c.name AS category_name  // Agrega nombre de categoría
+                c.name AS category_name 
             FROM adoptions AS a 
             JOIN pets AS p ON a.id_pet = p.id 
             JOIN users u ON a.id_user = u.id 
             LEFT JOIN municipalities m ON p.id_municipality = m.id 
             LEFT JOIN races r ON p.id_race = r.id 
-            LEFT JOIN categories c ON p.id_category = c.id  // Une con la tabla de categorías
+            LEFT JOIN categories c ON p.id_category = c.id
             WHERE a.id = ?`,
             [id]
         );

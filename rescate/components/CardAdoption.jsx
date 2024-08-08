@@ -117,7 +117,7 @@ const CardAdoption = ({ pet }) => {
       </View>
       <View style={styles.actions}>
         {user.role === 'usuario' ? (
-          <View style={styles.userActions}>
+          <View style={{ width: '100%', display: 'flex', justifyContent: 'space-around', flexDirection: 'row', alignItems: 'center'}}>
             <Button
               title={pet.state === 'En proceso' ? 'En proceso' : pet.state === 'Adoptado' ? 'Adoptado' : 'Adoptar'}
               onPress={() => handleAdopt(pet.id_pet)}

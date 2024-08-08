@@ -53,8 +53,9 @@ const Users = () => {
                             <View style={styles.card} key={u.id}>
                                 <Text style={styles.name}>{u.name}</Text>
                                 <Text style={styles.role}>{u.role}</Text>
+                                <Text style={styles.email}>{u.email}</Text>
                                 <View style={styles.buttonContainer}>
-                                    <Button title="Editar" onPress={() => navigation.navigate('EditUser', { user: u})} />
+                                    <Button title="Editar" onPress={() => navigation.navigate('EditUser', { user: u })} />
                                     <Button title="Eliminar" onPress={() => Alert.alert('Confirmar', '¿Estás seguro de que deseas eliminar?', [
                                         { text: 'Cancelar', style: 'cancel' },
                                         { text: 'Eliminar', onPress: () => onDelete(u.id) },
@@ -69,31 +70,37 @@ const Users = () => {
     )
 }
 
-
 const styles = StyleSheet.create({
     card: {
-        padding: 20,
+        padding: 15, // Ajusta el padding
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#ddd',
         marginBottom: 10,
-        alignItems: 'center',
         backgroundColor: '#fff',
+        width: '90%',
     },
     name: {
-        fontSize: 18,
+        fontSize: 16, // Ajusta el tamaño de fuente
         fontWeight: 'bold',
-        marginBottom: 5,
+        marginBottom: 4,
+        color: 'black'
     },
     role: {
-        fontSize: 16,
+        fontSize: 14, // Ajusta el tamaño de fuente
         color: '#666',
-        marginBottom: 15,
+        marginBottom: 4,
+        color: 'black'
+    },
+    email: {
+        fontSize: 14, // Ajusta el tamaño de fuente
+        color: '#333',
+        marginBottom: 10,
+        color: 'black'
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '100%',
     },
 });
 
