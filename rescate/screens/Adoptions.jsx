@@ -10,20 +10,25 @@ const Adoptions = () => {
     const [adoptions, setAdoptions] = useState([]);
 
     const getAdoptions = async () => {
+        console.log(user);
+
         if (user) {
             try {
-                if (user.role == 'administrador') {
-                    const response = await axiosClient.get(`/adoptions`);
-                    if (response.status === 200) {
-                        setAdoptions(response.data);
-                    }
-                } else {
-                    const response = await axiosClient.get(`/adoption/user/${user.id}`);
-                    if (response.status === 200) {
-                        setAdoptions(response.data);
-                    }
-                }
-        
+
+                user.role == 'administrador' ? (
+                    await axiosClient.get(`/adoptions`).then((response) => {
+                        if (response.status === 200) {
+                            setAdoptions(response.data);
+                        }
+                    })
+                ) : (
+                    await axiosClient.get(`/adoption/user/${user.id}`).then((response) => {
+                        if (response.status === 200) {
+                            setAdoptions(response.data);
+                        }
+                    })
+                )
+
             } catch (error) {
                 // console.error(error);
                 setAdoptions([]);
