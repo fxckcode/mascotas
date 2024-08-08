@@ -10,8 +10,6 @@ const Adoptions = () => {
     const [adoptions, setAdoptions] = useState([]);
 
     const getAdoptions = async () => {
-        console.log(user);
-
         if (user) {
             try {
 
