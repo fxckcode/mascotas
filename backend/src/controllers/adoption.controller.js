@@ -77,7 +77,7 @@ export const getMyAdoption = async (req, res) => {
                 r.id AS id_race,
                 a.description_admin,
                 a.description_user,
-                c.name AS category_name
+                c.name AS category_name,
                 u.id AS id_user
             FROM adoptions AS a 
             JOIN pets AS p ON a.id_pet = p.id 
