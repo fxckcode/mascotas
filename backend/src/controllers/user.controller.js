@@ -1,6 +1,6 @@
 // Importa la conexión a la base de datos desde el módulo 'conexion.js'
 import pool from '../database/conexion.js'
-
+import bcrypt from 'bcrypt'
 // Función para obtener todos los usuarios de la base de datos
 export const getUsers = async (req, res) => {
     try {
@@ -81,7 +81,7 @@ export const updateUser = async (req, res) => {
         const data = {
             name: name ? name : oldUser[0].name,
             email: email ? email : oldUser[0].email,
-            password: password ? password : oldUser[0].password,
+            password: password ? await bcrypt.hash(password, 10) : oldUser[0].password,
             phone: phone ? phone : oldUser[0].phone,
             role: role ? role : oldUser[0].role,
             identification: identification ? identification : oldUser[0].identification
