@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import AddCategories from '../components/AddCategories'
 import AddMunicipalities from '../components/AddMunicipalities'
+import CardUsers from '../components/CardUsers'
 
 const Profile = () => {
     const { user, setUser } = useContext(UserContext)
@@ -72,10 +73,18 @@ const Profile = () => {
                     <TouchableOpacity onPress={() => handleLogout()}>
                         <Text style={{ textAlign: 'center', marginVertical: 10, fontWeight: 'bold', fontSize: 17 }}>Cerrar Sesión</Text>
                     </TouchableOpacity>
-                    <View style={{ width: '100%', display: 'flex', flexDirection: 'row', gap: 5, justifyContent: 'space-between' }}>
-                        <AddCategories />
-                        <AddMunicipalities />
-                    </View>
+                    {
+                        user.role === 'administrador' ? (
+                            <>
+                                <View style={{ width: '100%', display: 'flex', flexDirection: 'row', gap: 5, justifyContent: 'space-between' }}>
+                                    <AddCategories />
+                                    <AddMunicipalities />
+                                </View>
+                                <CardUsers />
+                            </>
+                        ) : null
+                    }
+
                 </View>
             </ScrollView>
         </SafeAreaView>

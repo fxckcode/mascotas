@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   cardText: {
     fontSize: 18,
     marginBottom: 10,
+    color: 'black'
   },
   modalContainer: {
     flex: 1,
@@ -92,6 +93,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     marginBottom: 10,
+    color: 'black',
   },
   input: {
     width: '100%',
@@ -99,6 +101,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     marginBottom: 20,
     padding: 10,
+    color: 'black',
   },
   buttonContainer: {
     flexDirection: 'row',

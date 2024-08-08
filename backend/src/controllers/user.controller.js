@@ -72,7 +72,7 @@ export const updateUser = async (req, res) => {
     try {
         // Extrae el ID del parámetro de la solicitud y los datos del cuerpo de la solicitud
         const { id } = req.params
-        const { name, email, password, phone, role } = req.body
+        const { name, email, password, phone, role, identification } = req.body
 
         // Realiza una consulta SQL para obtener los datos actuales del usuario
         const [oldUser] = await pool.query('select * from users where id = ?', [id])
@@ -83,11 +83,12 @@ export const updateUser = async (req, res) => {
             email: email ? email : oldUser[0].email,
             password: password ? password : oldUser[0].password,
             phone: phone ? phone : oldUser[0].phone,
-            role: role ? role : oldUser[0].role
+            role: role ? role : oldUser[0].role,
+            identification: identification ? identification : oldUser[0].identification
         }
 
         // Realiza una consulta SQL para actualizar los datos del usuario
-        const [result] = await pool.query('update users set name=?, email=?, password=?, phone=? where id = ?', [data.name, data.email, data.password, data.phone, id])
+        const [result] = await pool.query('update users set name=?, email=?, password=?, phone=?, identification=?, role=? where id = ?', [data.name, data.email, data.password, data.phone, data.identification, data.role, id])
 
         // Verifica si la actualización fue exitosa
         if (result.affectedRows > 0) {

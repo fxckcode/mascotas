@@ -13,6 +13,8 @@ import { UserProvider } from './context/UserContext'
 import ConsulPetAdoption from './screens/ConsulPetAdoption'
 import EditPet from './screens/EditPet'
 import HomeGuest from './screens/HomeGuest'
+import Users from './screens/Users'
+import EditUser from './screens/EditUser'
 
 const Stack = createNativeStackNavigator()
 const App = () => {
@@ -55,7 +57,7 @@ const App = () => {
               headerTitle: 'Adoptar mascota',
             }}
           />
-          <Stack.Screen 
+          <Stack.Screen
             name='ConsulPetAdoption'
             component={ConsulPetAdoption}
             options={{
@@ -70,11 +72,25 @@ const App = () => {
             }}
           />
 
-          <Stack.Screen 
+          <Stack.Screen
             name="HomeGuest"
             component={HomeGuest}
-            options={{ 
+            options={{
               headerTitle: 'Lista de mascotas',
+            }}
+          />
+          <Stack.Screen
+            name='Users'
+            component={Users}
+            options={{
+              headerTitle: 'Usuarios',
+            }}
+          />
+          <Stack.Screen
+            name='EditUser'
+            component={EditUser}
+            options={{
+              headerTitle: 'Editar Usuario',
             }}
           />
         </Stack.Navigator>
