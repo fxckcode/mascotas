@@ -15,6 +15,7 @@ const EditPet = ({ route }) => {
     const [municipality, setMunicipality] = useState([])
     const [races, setRaces] = useState([])
     const [selectImage, setSelectImage] = useState(null)
+    const [categories, setCategories] = useState([]);
 
     const [nombre, setNombre] = useState(pet.name)
     const [selectRaces, setSelectRaces] = useState(pet.id_race)
@@ -26,6 +27,7 @@ const EditPet = ({ route }) => {
     const [background, setBackground] = useState(pet.background)
     const [vaccines, setVaccines] = useState(pet.vaccines)
     const [uploadImage, setUploadImage] = useState(null)
+    const [selectCategory, setSelectCategory] = useState(pet.id_category);
 
     const getData = async () => {
         try {
@@ -42,6 +44,13 @@ const EditPet = ({ route }) => {
                 })
                 setRaces(formtaData)
             })
+
+            await axiosClient.get('/categories').then((response) => {
+                const formtaData = response.data.map((item) => {
+                    return { label: item.name, value: item.id };
+                });
+                setCategories(formtaData);
+            });
         } catch (error) {
             console.error(error);
             setMunicipality([])
@@ -91,6 +100,7 @@ const EditPet = ({ route }) => {
             formData.append('description', description)
             formData.append('background', background)
             formData.append('vaccines', vaccines)
+            formData.append('id_category', selectCategory);
 
             await axiosClient.put(`/pet/${pet.id}`, formData, {
                 headers: {
@@ -135,17 +145,31 @@ const EditPet = ({ route }) => {
                         value={nombre}
                         onChangeText={(text) => setNombre(text)}
                     />
-                    <RNPickerSelect
-                        placeholder={{ label: 'Razas', value: null }}
-                        onValueChange={(value) => setSelectRaces(value)}
-                        items={races}
-                        value={selectRaces}
-                        style={{
-                            placeholder: { color: '#9C50C4' },
-                            inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
+                    <View style={style.pickerContainer}>
+                        <RNPickerSelect
+                            placeholder={{ label: 'Categorias', value: null }}
+                            onValueChange={(value) => setSelectCategory(value)}
+                            items={categories}
+                            value={selectCategory}
+                            style={{
+                                placeholder: { color: '#9C50C4' },
+                                inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
+                            }}
+                        />
+                    </View>
+                    <View style={style.pickerContainer}>
+                        <RNPickerSelect
+                            placeholder={{ label: 'Razas', value: null }}
+                            onValueChange={(value) => setSelectRaces(value)}
+                            items={races}
+                            value={selectRaces}
+                            style={{
+                                placeholder: { color: '#9C50C4' },
+                                inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
 
-                        }}
-                    />
+                            }}
+                        />
+                    </View>
                     <Input leftIcon={() => <FontAwesomeIcon icon={faHeart} size={20} style={{ color: '#9C50C4', marginLeft: 10 }} />}
                         inputContainerStyle={style.inputStyle}
                         labelStyle={style.labelStyle}
@@ -156,34 +180,38 @@ const EditPet = ({ route }) => {
                         value={age}
                         onChangeText={(text) => setAge(text)}
                     />
-                    <RNPickerSelect
-                        placeholder={{ label: 'Esterilizado', value: null }}
-                        onValueChange={(value) => setSterilized(value)}
-                        items={[
-                            { label: 'Si', value: 1 },
-                            { label: 'No', value: 2 }
-                        ]}
-                        style={{
-                            placeholder: { color: '#9C50C4' },
-                            inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
+                     <View style={style.pickerContainer}>
+                        <RNPickerSelect
+                            placeholder={{ label: 'Esterilizado', value: null }}
+                            onValueChange={(value) => setSterilized(value)}
+                            items={[
+                                { label: 'Si', value: 1 },
+                                { label: 'No', value: 2 }
+                            ]}
+                            style={{
+                                placeholder: { color: '#9C50C4' },
+                                inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
 
-                        }}
-                        value={sterilized}
-                    />
-                    <RNPickerSelect
-                        placeholder={{ label: 'Género', value: null }}
-                        onValueChange={(value) => setGender(value)}
-                        items={[
-                            { label: 'Macho', value: 1 },
-                            { label: 'Hembra', value: 2 }
-                        ]}
-                        value={gender}
-                        style={{
-                            placeholder: { color: '#9C50C4' },
-                            inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
+                            }}
+                            value={sterilized}
+                        />
+                     </View>
+                     <View style={style.pickerContainer}>
+                        <RNPickerSelect
+                            placeholder={{ label: 'Género', value: null }}
+                            onValueChange={(value) => setGender(value)}
+                            items={[
+                                { label: 'Macho', value: 1 },
+                                { label: 'Hembra', value: 2 }
+                            ]}
+                            value={gender}
+                            style={{
+                                placeholder: { color: '#9C50C4' },
+                                inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
 
-                        }}
-                    />
+                            }}
+                        />
+                     </View>
 
                     {
                         selectImage && <Image source={{ uri: selectImage }} style={{ width: 200, height: 200 }} />
@@ -191,17 +219,20 @@ const EditPet = ({ route }) => {
 
                     <Button title={'Seleccionar imagen'} buttonStyle={[style.button]} onPress={() => handleSelectImage()} />
 
-                    <RNPickerSelect
-                        placeholder={{ label: 'Municipios', value: null }}
-                        onValueChange={(value) => setSelectMuniciplality(value)}
-                        items={municipality}
-                        style={{
-                            placeholder: { color: '#9C50C4' },
-                            inputAndroid: { color: '#9C50C4', width: '100%', height: 50, marginBottom: 10 },
+                    <View style={[style.pickerContainer, {marginTop: 15}]}>
+                        <RNPickerSelect
+                            placeholder={{ label: 'Municipios', value: null }}
+                            onValueChange={(value) => setSelectMuniciplality(value)}
+                            items={municipality}
+                            style={{
+                                placeholder: { color: '#9C50C4' },
+                                inputAndroid: { color: '#9C50C4', width: '100%', height: 50, marginBottom: 10 },
 
-                        }}
-                        value={selectMuniciplality}
-                    />
+                            }}
+                            value={selectMuniciplality}
+                        />
+                    </View>
+
                     <Input leftIcon={() => <FontAwesomeIcon icon={faPenToSquare} size={20} style={{ color: '#9C50C4' }} />}
                         inputContainerStyle={style.inputDescripcion}
                         labelStyle={style.labelStyle}
@@ -247,6 +278,17 @@ const style = StyleSheet.create({
         borderRadius: 5,
         color: '#9C50C4',
 
+    },
+    pickerContainer: {
+        borderColor: '#9C50C4', // Color del borde
+        borderWidth: 1,         // Grosor del borde
+        borderRadius: 10,       // Radio de borde redondeado
+        width: '95%',          // Ajusta el ancho según tus necesidades
+        // height: 40,             // Ajusta la altura según tus necesidades
+        justifyContent: 'center',
+        paddingHorizontal: 10,
+        marginHorizontal: 20,
+        marginBottom: 15
     },
     inputDescripcion: {
         borderColor: '#9C50C4',

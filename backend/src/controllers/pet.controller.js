@@ -20,7 +20,7 @@ const upload = multer({ storage: storage });
 // Exporta un middleware para manejar la carga de una sola imagen usando el campo 'image'
 export const cargarImagen = upload.single('image');
 
-// Función para obtener todas las mascotas con información adicional de municipios y razas
+// Función para obtener todas las mascotas con información adicional de municipios, razas y categorías
 export const getPets = async (req, res) => {
   try {
     // Realiza una consulta SQL para obtener todas las mascotas y sus detalles asociados
@@ -28,11 +28,13 @@ export const getPets = async (req, res) => {
       `SELECT 
         pets.*, 
         municipalities.name AS municipality, 
-        races.name AS race_name, 
+        races.name AS race_name,
+        categories.name AS category_name, 
         pets.id AS id 
       FROM pets 
       LEFT JOIN municipalities ON pets.id_municipality = municipalities.id 
-      LEFT JOIN races ON pets.id_race = races.id`
+      LEFT JOIN races ON pets.id_race = races.id
+      LEFT JOIN categories ON pets.id_category = categories.id`
     );
 
     // Verifica si se obtuvieron resultados
@@ -53,7 +55,7 @@ export const getPets = async (req, res) => {
 export const createPets = async (req, res) => {
   try {
     // Extrae los datos de la mascota del cuerpo de la solicitud
-    const { name, id_race, age, sterilized, gender, description, background, location, id_municipality, vaccines, phone_admin } = req.body;
+    const { name, id_race, age, sterilized, gender, description, background, location, id_municipality, vaccines, phone_admin, id_category } = req.body;
 
     let image = null;
 
@@ -64,8 +66,8 @@ export const createPets = async (req, res) => {
 
     // Realiza una consulta SQL para insertar una nueva mascota
     const [result] = await pool.query(
-      'INSERT INTO pets (name, id_race, age, sterilized, gender, image, description, background, location, id_municipality, vaccines, phone_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [name, id_race, age, sterilized, gender, image, description, background, location, id_municipality, vaccines, phone_admin]
+      'INSERT INTO pets (name, id_race, age, sterilized, gender, image, description, background, location, id_municipality, vaccines, phone_admin, id_category) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [name, id_race, age, sterilized, gender, image, description, background, location, id_municipality, vaccines, phone_admin, id_category]
     );
 
     // Verifica si la inserción fue exitosa
@@ -92,10 +94,12 @@ export const getPet = async (req, res) => {
       `SELECT 
         pets.*, 
         municipalities.name AS municipality, 
-        races.name AS race_name 
+        races.name AS race_name, 
+        categories.name AS category_name
       FROM pets 
       LEFT JOIN municipalities ON pets.id_municipality = municipalities.id 
       LEFT JOIN races ON pets.id_race = races.id 
+      LEFT JOIN categories ON pets.id_category = categories.id
       WHERE pets.id = ?`,
       [id]
     );
@@ -118,7 +122,7 @@ export const getPet = async (req, res) => {
 export const updatePet = async (req, res) => {
   try {
     const { id } = req.params; // Obtiene el ID de la mascota desde los parámetros de la solicitud
-    const { name, id_race, age, sterilized, gender, description, background, location, id_municipality, vaccines } = req.body;
+    const { name, id_race, age, sterilized, gender, description, background, location, id_municipality, vaccines, id_category } = req.body;
     
     // Obtiene los datos actuales de la mascota usando el ID proporcionado
     const [oldPet] = await pool.query('SELECT * FROM pets WHERE id = ?', [id]);
@@ -143,6 +147,7 @@ export const updatePet = async (req, res) => {
       location: location ?? oldPet[0].location,
       id_municipality: id_municipality ?? oldPet[0].id_municipality,
       vaccines: vaccines ?? oldPet[0].vaccines,
+      id_category: id_category ?? oldPet[0].id_category,
     };
 
     // Realiza una consulta SQL para actualizar los datos de la mascota

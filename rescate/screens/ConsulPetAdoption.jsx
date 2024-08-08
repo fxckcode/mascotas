@@ -32,6 +32,10 @@ const ConsultPetAdoption = ({ route }) => {
             <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.vaccines}</Text>
           </View>
           <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Categoria: </Text>
+            <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.category_name}</Text>
+          </View>
+          <View style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ width: '40%', color: '#9C50C4', fontSize: 20, fontWeight: '500' }} >Género: </Text>
             <Text style={{ color: '#9C50C4', fontSize: 18 }}>{pet.gender}</Text>
           </View>

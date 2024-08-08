@@ -29,7 +29,7 @@ const HomeGuest = () => {
     }, [])
 
     const handleConsult = () => {
-        navigation.navigate('Login')
+        navigation.navigate('SingUp')
         ToastAndroid.show('Inicia sesión para adoptar una mascota', ToastAndroid.SHORT)
     }
 

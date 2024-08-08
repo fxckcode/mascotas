@@ -23,16 +23,17 @@ export const getAdoptions = async (req, res) => {
                 p.name, 
                 u.email, 
                 u.phone, 
-                u.id AS id_user, 
                 r.name AS race_name, 
                 r.id AS id_race,
+                c.name AS category_name,  // Agrega nombre de categoría
                 a.description_admin,
                 a.description_user
             FROM adoptions AS a 
             JOIN pets AS p ON a.id_pet = p.id 
             JOIN users u ON a.id_user = u.id 
             LEFT JOIN municipalities m ON p.id_municipality = m.id 
-            LEFT JOIN races r ON p.id_race = r.id`
+            LEFT JOIN races r ON p.id_race = r.id 
+            LEFT JOIN categories c ON p.id_category = c.id`  // Une con la tabla de categorías
         );
         
         // Verifica si se encontraron resultados
@@ -73,6 +74,7 @@ export const getMyAdoption = async (req, res) => {
                 u.phone, 
                 r.name AS race_name, 
                 r.id AS id_race,
+                c.name AS category_name,  // Agrega nombre de categoría
                 a.description_admin,
                 a.description_user
             FROM adoptions AS a 
@@ -80,6 +82,7 @@ export const getMyAdoption = async (req, res) => {
             JOIN users u ON a.id_user = u.id 
             LEFT JOIN municipalities m ON p.id_municipality = m.id 
             LEFT JOIN races r ON p.id_race = r.id 
+            LEFT JOIN categories c ON p.id_category = c.id  // Une con la tabla de categorías
             WHERE a.id_user = ? AND a.state != 'No aprobado'`,
             [parseInt(id)]
         );
@@ -119,12 +122,14 @@ export const getAdoption = async (req, res) => {
                 u.email, 
                 u.phone, 
                 r.name AS race_name, 
-                r.id AS id_race 
+                r.id AS id_race,
+                c.name AS category_name  // Agrega nombre de categoría
             FROM adoptions AS a 
             JOIN pets AS p ON a.id_pet = p.id 
             JOIN users u ON a.id_user = u.id 
             LEFT JOIN municipalities m ON p.id_municipality = m.id 
             LEFT JOIN races r ON p.id_race = r.id 
+            LEFT JOIN categories c ON p.id_category = c.id  // Une con la tabla de categorías
             WHERE a.id = ?`,
             [id]
         );

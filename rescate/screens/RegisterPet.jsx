@@ -11,6 +11,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 const RegisterPet = () => {
   const navigation = useNavigation();
   const [municipality, setMunicipality] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [races, setRaces] = useState([]);
   const [selectImage, setSelectImage] = useState(null);
   const [nombre, setNombre] = useState('');
@@ -23,6 +24,7 @@ const RegisterPet = () => {
   const [background, setBackground] = useState('');
   const [vaccines, setVaccines] = useState('');
   const [uploadImage, setUploadImage] = useState(null);
+  const [selectCategory, setSelectCategory] = useState(null);
   const [errors, setErrors] = useState({});
 
   const getData = async () => {
@@ -39,6 +41,13 @@ const RegisterPet = () => {
           return { label: item.name, value: item.id };
         });
         setRaces(formtaData);
+      });
+
+      await axiosClient.get('/categories').then((response) => {
+        const formtaData = response.data.map((item) => {
+          return { label: item.name, value: item.id };
+        });
+        setCategories(formtaData);
       });
     } catch (error) {
       console.error(error);
@@ -80,6 +89,7 @@ const RegisterPet = () => {
     if (!background) newErrors.background = 'Antecedentes son obligatorios';
     if (!vaccines) newErrors.vaccines = 'Vacunas son obligatorias';
     if (!uploadImage) newErrors.uploadImage = 'Imagen es obligatoria';
+    if (!selectCategory) newErrors.selectCategory = 'Categoria es obligatoria';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -103,6 +113,7 @@ const RegisterPet = () => {
       formData.append('description', description);
       formData.append('background', background);
       formData.append('vaccines', vaccines);
+      formData.append('id_category', selectCategory);
 
       await axiosClient.post('/pets', formData, {
         headers: {
@@ -124,6 +135,7 @@ const RegisterPet = () => {
           setVaccines('');
           setSelectImage(null);
           setUploadImage(null);
+          setSelectCategory(null);
         }
       });
     } catch (error) {
@@ -148,6 +160,20 @@ const RegisterPet = () => {
             onChangeText={(text) => setNombre(text)}
           />
           {errors.nombre && <Text style={style.errorText}>{errors.nombre}</Text>}
+
+          <View style={style.pickerContainer}>
+            <RNPickerSelect
+              placeholder={{ label: 'Categorias', value: null }}
+              onValueChange={(value) => setSelectCategory(value)}
+              items={categories}
+              value={selectCategory}
+              style={{
+                placeholder: { color: '#9C50C4' },
+                inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
+              }}
+            />
+          </View>
+          {errors.selectRaces && <Text style={style.errorText}>{errors.selectCategory}</Text>}
 
           <View style={style.pickerContainer}>
             <RNPickerSelect

@@ -12,6 +12,7 @@ import { validarToken } from './src/controllers/auth.controller.js'
 import racesRoutes from './src/routes/race.routes.js'
 import pool from './src/database/conexion.js'
 import bcrypt from 'bcrypt'
+import categoriesRoutes from './src/routes/category.routes.js'
 
 const server = express()
 
@@ -50,6 +51,7 @@ server.use(validarToken, listVaccinePetRoutes)
 server.use(validarToken, adoptionRoutes)
 server.use(validarToken, municipalityRoutes)
 server.use(validarToken, racesRoutes)
+server.use(validarToken, categoriesRoutes)
 
 server.listen(3333, () => {
     console.log('Servidor corriendo en el puerto http://localhost:3333/');
