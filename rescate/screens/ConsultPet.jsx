@@ -39,7 +39,7 @@ const ConsultPet = ({ route }) => {
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.infoLabel}>Esterilizado:</Text>
-          <Text style={styles.infoValue}>{pet.sterilized ? 'Sí' : 'No'}</Text>
+          <Text style={styles.infoValue}>{pet.sterilized}</Text>
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.infoLabel}>Vacunas:</Text>
