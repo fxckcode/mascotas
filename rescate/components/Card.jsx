@@ -127,7 +127,7 @@ const Card = ({ pet }) => {
 
 const styles = StyleSheet.create({
     card: {
-        width: '50%',
+        width: '45%',
         height: 330,
         backgroundColor: '#f9f9f9',
         borderRadius: 12,

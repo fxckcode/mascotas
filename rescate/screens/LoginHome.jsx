@@ -47,9 +47,12 @@ const LoginHome = () => {
             fontSize: 14,
             fontWeight: '600',
             marginBottom: 20,
+            color: 'black'
           }}>En cada pata, en cada mirada, hay un universo de amor esperando por ti. Adopta una mascota y cambia dos vidas, la tuya y la de ellos. Descubre el verdadero significado de lealtad y compañía.
             <Text style={{
-              color:'#000000'
+              color:'#000000',
+              fontWeight: '700',
+              fontSize: 16
             }}>
               ¡Haz la diferencia hoy!
             </Text>
@@ -65,10 +68,12 @@ const LoginHome = () => {
             <Text style={{
               textAlign: 'center',
               fontSize: 14,
-              fontWeight: '600'
+              fontWeight: '600',
+              color: 'black'
             }}>¿No tienes cuenta?</Text>
             <Button buttonStyle={[style.button, style.btnLogin]}
               title={"Registrarse"} onPress={() => { navigation.navigate('SingUp') }} />
+            <Text style={{ textAlign: 'center' }} onPress={() => navigation.navigate('HomeGuest')}>Sesión de invitado</Text>
           </View>
         </View>
       </View>

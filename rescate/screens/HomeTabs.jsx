@@ -7,7 +7,6 @@ import { faDog, faHome, faPen, faPlus, faUser } from '@fortawesome/free-solid-sv
 import Adoptions from './Adoptions';
 import Profile from './Profile';
 import { UserContext } from '../context/UserContext';
-import Create from './Create';
 import RegisterPet from './RegisterPet';
 
 const Tab = createBottomTabNavigator()

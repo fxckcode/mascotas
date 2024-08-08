@@ -12,6 +12,7 @@ import HomeTabs from './screens/HomeTabs'
 import { UserProvider } from './context/UserContext'
 import ConsulPetAdoption from './screens/ConsulPetAdoption'
 import EditPet from './screens/EditPet'
+import HomeGuest from './screens/HomeGuest'
 
 const Stack = createNativeStackNavigator()
 const App = () => {
@@ -66,6 +67,14 @@ const App = () => {
             component={EditPet}
             options={{
               headerTitle: 'Editar mascota',
+            }}
+          />
+
+          <Stack.Screen 
+            name="HomeGuest"
+            component={HomeGuest}
+            options={{ 
+              headerTitle: 'Lista de mascotas',
             }}
           />
         </Stack.Navigator>

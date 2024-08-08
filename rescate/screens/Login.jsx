@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, Image, ToastAndroid } from 'react-native'
+import { View, Text, StyleSheet, Image, ToastAndroid, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { Input } from '@rneui/base'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faEye, faEyeSlash, faLock } from '@fortawesome/free-solid-svg-icons'
 import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
 import logo from '../img/logo.png'
@@ -14,16 +14,23 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const navigation = useNavigation()
-  const { setUser} = useContext(UserContext)
+  const { setUser } = useContext(UserContext)
+  const [ secureTextEntry, setSecureTextEntry ] = useState(true)
 
   const handleSubmit = async () => {
     try {
 
-      if (email == '' || password == '') {
-        ToastAndroid.show('Todos los campos son obligatorios', ToastAndroid.SHORT)
-        return
+      // Validate input fields
+      if (email === '' || password === '') {
+        ToastAndroid.show('Todos los campos son obligatorios', ToastAndroid.SHORT);
+        return;
       }
 
+      // Validate email format
+      if (!email.includes('@')) {
+        ToastAndroid.show('Ingrese un correo electrónico válido', ToastAndroid.SHORT);
+        return;
+      }
       const data = {
         email,
         password
@@ -35,19 +42,20 @@ const Login = () => {
           await AsyncStorage.setItem('user', JSON.stringify(response.data.user))
           setUser(response.data.user)
           ToastAndroid.show('Inicio de sesión exitoso', ToastAndroid.SHORT)
-          navigation.navigate('HomeTabs')         
+          navigation.navigate('HomeTabs')
         }
       })
     } catch (error) {
       console.error(error);
+      ToastAndroid.show('Credenciales incorrectas', ToastAndroid.SHORT)
     }
   }
 
   return (
-    <View>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={{
         width: '100%',
-        height: '40%',
+        height: '45%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
@@ -59,15 +67,6 @@ const Login = () => {
         />
       </View>
       <View style={style.container}>
-        <Text
-          style={{
-            color: '#ffffff',
-            fontWeight: '700',
-            fontSize: 27,
-            marginBottom: 30,
-            textAlign: 'center'
-          }}>Iniciar Sesión
-        </Text>
         <Input leftIcon={() => <FontAwesomeIcon icon={faEnvelope} size={20} style={{ color: '#ffffff', marginLeft: 10 }} />}
           placeholder='Ingrese el correo electronico'
           inputContainerStyle={style.inputStyle}
@@ -88,11 +87,12 @@ const Login = () => {
           placeholderTextColor={'#ffffff'}
           value={password}
           onChangeText={(value) => setPassword(value)}
-          secureTextEntry={true}
+          secureTextEntry={secureTextEntry}
+          rightIcon={() => <TouchableOpacity  onPress={() => setSecureTextEntry(!secureTextEntry)}><Text> <FontAwesomeIcon icon={secureTextEntry ? faEye : faEyeSlash} size={20} style={{ color: '#ffffff' }} /></Text></TouchableOpacity>}
         />
         <Button title={'Iniciar Sesión'} onPress={() => handleSubmit()} buttonStyle={[style.button]} />
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -103,7 +103,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     width: '100%',
-    height: '60%',
+    height: '55%',
     borderTopStartRadius: 30,
     borderTopEndRadius: 30
   },

@@ -148,18 +148,20 @@ const RegisterPet = () => {
             onChangeText={(text) => setNombre(text)}
           />
           {errors.nombre && <Text style={style.errorText}>{errors.nombre}</Text>}
-          
-          <RNPickerSelect
-            placeholder={{ label: 'Razas', value: null }}
-            onValueChange={(value) => setSelectRaces(value)}
-            items={races}
-            style={{
-              placeholder: { color: '#9C50C4' },
-              inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
-            }}
-          />
+
+          <View style={style.pickerContainer}>
+            <RNPickerSelect
+              placeholder={{ label: 'Razas', value: null }}
+              onValueChange={(value) => setSelectRaces(value)}
+              items={races}
+              style={{
+                placeholder: { color: '#9C50C4' },
+                inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
+              }}
+            />
+          </View>
           {errors.selectRaces && <Text style={style.errorText}>{errors.selectRaces}</Text>}
-          
+
           <Input
             leftIcon={() => <FontAwesomeIcon icon={faHeart} size={20} style={{ color: '#9C50C4', marginLeft: 10 }} />}
             inputContainerStyle={style.inputStyle}
@@ -172,50 +174,57 @@ const RegisterPet = () => {
             onChangeText={(text) => setAge(text)}
           />
           {errors.age && <Text style={style.errorText}>{errors.age}</Text>}
-          
-          <RNPickerSelect
-            placeholder={{ label: 'Esterilizado', value: null }}
-            onValueChange={(value) => setSterilized(value)}
-            items={[
-              { label: 'Si', value: 1 },
-              { label: 'No', value: 2 }
-            ]}
-            style={{
-              placeholder: { color: '#9C50C4' },
-              inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
-            }}
-          />
+
+          <View style={style.pickerContainer}>
+            <RNPickerSelect
+              placeholder={{ label: 'Esterilizado', value: null }}
+              onValueChange={(value) => setSterilized(value)}
+              items={[
+                { label: 'Si', value: 1 },
+                { label: 'No', value: 2 }
+              ]}
+              style={{
+                placeholder: { color: '#9C50C4' },
+                inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
+              }}
+            />
+          </View>
           {errors.sterilized && <Text style={style.errorText}>{errors.sterilized}</Text>}
-          
-          <RNPickerSelect
-            placeholder={{ label: 'Género', value: null }}
-            onValueChange={(value) => setGender(value)}
-            items={[
-              { label: 'Macho', value: 1 },
-              { label: 'Hembra', value: 2 }
-            ]}
-            style={{
-              placeholder: { color: '#9C50C4' },
-              inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
-            }}
-          />
+
+          <View style={style.pickerContainer}>
+            <RNPickerSelect
+              placeholder={{ label: 'Género', value: null }}
+              onValueChange={(value) => setGender(value)}
+              items={[
+                { label: 'Macho', value: 1 },
+                { label: 'Hembra', value: 2 }
+              ]}
+              style={{
+                placeholder: { color: '#9C50C4' },
+                inputAndroid: { color: '#9C50C4', width: '100%', height: 40, marginBottom: 10 },
+              }}
+            />
+          </View>
+
           {errors.gender && <Text style={style.errorText}>{errors.gender}</Text>}
-          
+
           {selectImage && <Image source={{ uri: selectImage }} style={{ width: 200, height: 200 }} />}
           <Button title={'Seleccionar imagen'} buttonStyle={[style.button]} onPress={() => handleSelectImage()} />
           {errors.uploadImage && <Text style={style.errorText}>{errors.uploadImage}</Text>}
-          
-          <RNPickerSelect
-            placeholder={{ label: 'Municipios', value: null }}
-            onValueChange={(value) => setSelectMuniciplality(value)}
-            items={municipality}
-            style={{
-              placeholder: { color: '#9C50C4' },
-              inputAndroid: { color: '#9C50C4', width: '100%', height: 50, marginBottom: 10 },
-            }}
-          />
+
+          <View style={[style.pickerContainer, {marginTop: 15}]}>
+            <RNPickerSelect
+              placeholder={{ label: 'Municipios', value: null }}
+              onValueChange={(value) => setSelectMuniciplality(value)}
+              items={municipality}
+              style={{
+                placeholder: { color: '#9C50C4' },
+                inputAndroid: { color: '#9C50C4', width: '100%', height: 50, marginBottom: 10 },
+              }}
+            />
+          </View>
           {errors.selectMuniciplality && <Text style={style.errorText}>{errors.selectMuniciplality}</Text>}
-          
+
           <Input
             leftIcon={() => <FontAwesomeIcon icon={faPenToSquare} size={20} style={{ color: '#9C50C4' }} />}
             inputContainerStyle={style.inputDescripcion}
@@ -229,7 +238,7 @@ const RegisterPet = () => {
             multiline={true}
           />
           {errors.description && <Text style={style.errorText}>{errors.description}</Text>}
-          
+
           <Input
             leftIcon={() => <FontAwesomeIcon icon={faPenToSquare} size={20} style={{ color: '#9C50C4' }} />}
             inputContainerStyle={style.inputDescripcion}
@@ -243,7 +252,7 @@ const RegisterPet = () => {
             multiline={true}
           />
           {errors.background && <Text style={style.errorText}>{errors.background}</Text>}
-          
+
           <Input
             leftIcon={() => <FontAwesomeIcon icon={faPenToSquare} size={20} style={{ color: '#9C50C4' }} />}
             inputContainerStyle={style.inputDescripcion}
@@ -257,7 +266,7 @@ const RegisterPet = () => {
             multiline={true}
           />
           {errors.vaccines && <Text style={style.errorText}>{errors.vaccines}</Text>}
-          
+
           <Button title={'Registrar'} onPress={() => handleSubmit()} buttonStyle={[style.button]} />
         </View>
       </ScrollView>
@@ -282,6 +291,17 @@ const style = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  pickerContainer: {
+    borderColor: '#9C50C4', // Color del borde
+    borderWidth: 1,         // Grosor del borde
+    borderRadius: 10,       // Radio de borde redondeado
+    width: '95%',          // Ajusta el ancho según tus necesidades
+    // height: 40,             // Ajusta la altura según tus necesidades
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    marginHorizontal: 20,
+    marginBottom: 15
   },
   content: {
     flex: 1,

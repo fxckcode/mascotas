@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, ToastAndroid, StyleSheet, Modal, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ToastAndroid, StyleSheet, Modal, Alert, Linking } from 'react-native';
 import React, { useContext, useState } from 'react';
 import axiosClient from '../utils/axiosClient';
 import { UserContext } from '../context/UserContext';
@@ -7,6 +7,7 @@ import { Button } from '@rneui/base';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { Input } from 'react-native-elements';
+import { generarLinkWhatsApp } from '../utils/generarLinkWhatsapp';
 
 const CardAdoption = ({ pet }) => {
   const { user } = useContext(UserContext);
@@ -21,13 +22,14 @@ const CardAdoption = ({ pet }) => {
   };
 
   const handleModalAction = async () => {
-    try {      
+    try {
       await axiosClient.put(`/${actionType}/${pet.id_user}/${pet.id_pet}`, { description_admin: mensaje }).then((response) => {
-      
         if (response.status === 200) {
           ToastAndroid.show(`Gestión hecha con exito`, ToastAndroid.SHORT);
           setModalVisible(false);
           setMensaje('');
+          const link = generarLinkWhatsApp(pet.phone, mensaje);
+          Linking.openURL(link);
         }
       });
     } catch (error) {
