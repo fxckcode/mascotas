@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Input, Button, Image } from 'react-native-elements';
 import { faTransgender, faPaw, faHeart, faPenToSquare, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -7,9 +7,11 @@ import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import axiosClient from '../utils/axiosClient';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { UserContext } from '../context/UserContext';
 
 const RegisterPet = () => {
   const navigation = useNavigation();
+  const { user } = useContext(UserContext)
   const [municipality, setMunicipality] = useState([]);
   const [categories, setCategories] = useState([]);
   const [races, setRaces] = useState([]);
@@ -114,6 +116,7 @@ const RegisterPet = () => {
       formData.append('background', background);
       formData.append('vaccines', vaccines);
       formData.append('id_category', selectCategory);
+      formData.append('phone_admin', user.phone)
 
       await axiosClient.post('/pets', formData, {
         headers: {
